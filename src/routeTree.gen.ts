@@ -16,35 +16,65 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppWritersRouteImport } from './routes/app.writers'
+import { Route as AppWorkspacesRouteImport } from './routes/app.workspaces'
 import { Route as AppTemplatesRouteImport } from './routes/app.templates'
 import { Route as AppTeamRouteImport } from './routes/app.team'
+import { Route as AppSystemRouteImport } from './routes/app.system'
+import { Route as AppSubscriptionsRouteImport } from './routes/app.subscriptions'
 import { Route as AppSocialRouteImport } from './routes/app.social'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
+import { Route as AppSerpRouteImport } from './routes/app.serp'
 import { Route as AppSeoRouteImport } from './routes/app.seo'
 import { Route as AppSchemaRouteImport } from './routes/app.schema'
+import { Route as AppRevenueRouteImport } from './routes/app.revenue'
+import { Route as AppRequestsRouteImport } from './routes/app.requests'
+import { Route as AppReportsRouteImport } from './routes/app.reports'
+import { Route as AppRankingsRouteImport } from './routes/app.rankings'
 import { Route as AppProjectsRouteImport } from './routes/app.projects'
 import { Route as AppProductRouteImport } from './routes/app.product'
+import { Route as AppPortalRouteImport } from './routes/app.portal'
 import { Route as AppPlagiarismRouteImport } from './routes/app.plagiarism'
+import { Route as AppPipelineRouteImport } from './routes/app.pipeline'
+import { Route as AppOrdersRouteImport } from './routes/app.orders'
 import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
 import { Route as AppMetaRouteImport } from './routes/app.meta'
+import { Route as AppMessagesRouteImport } from './routes/app.messages'
+import { Route as AppMembersRouteImport } from './routes/app.members'
 import { Route as AppMediaRouteImport } from './routes/app.media'
 import { Route as AppLibraryRouteImport } from './routes/app.library'
 import { Route as AppLandingRouteImport } from './routes/app.landing'
 import { Route as AppKeywordsRouteImport } from './routes/app.keywords'
+import { Route as AppInvoicesRouteImport } from './routes/app.invoices'
+import { Route as AppInboxRouteImport } from './routes/app.inbox'
 import { Route as AppHumanizerRouteImport } from './routes/app.humanizer'
 import { Route as AppHelpRouteImport } from './routes/app.help'
+import { Route as AppGapRouteImport } from './routes/app.gap'
+import { Route as AppFlagsRouteImport } from './routes/app.flags'
+import { Route as AppFilesRouteImport } from './routes/app.files'
 import { Route as AppFaqRouteImport } from './routes/app.faq'
+import { Route as AppExportsRouteImport } from './routes/app.exports'
+import { Route as AppExecRouteImport } from './routes/app.exec'
+import { Route as AppErrorsRouteImport } from './routes/app.errors'
 import { Route as AppEmailRouteImport } from './routes/app.email'
 import { Route as AppDocumentsRouteImport } from './routes/app.documents'
 import { Route as AppDetectorRouteImport } from './routes/app.detector'
+import { Route as AppDecayRouteImport } from './routes/app.decay'
 import { Route as AppDashboardRouteImport } from './routes/app.dashboard'
+import { Route as AppCouponsRouteImport } from './routes/app.coupons'
+import { Route as AppCompetitorsRouteImport } from './routes/app.competitors'
+import { Route as AppClustersRouteImport } from './routes/app.clusters'
+import { Route as AppCatalogRouteImport } from './routes/app.catalog'
 import { Route as AppBriefRouteImport } from './routes/app.brief'
 import { Route as AppBlogGeneratorRouteImport } from './routes/app.blog-generator'
 import { Route as AppBillingRouteImport } from './routes/app.billing'
+import { Route as AppBacklinksRouteImport } from './routes/app.backlinks'
+import { Route as AppAuditRouteImport } from './routes/app.audit'
 import { Route as AppAnalyticsRouteImport } from './routes/app.analytics'
 import { Route as AppAiWriterRouteImport } from './routes/app.ai-writer'
 import { Route as AppAdsRouteImport } from './routes/app.ads'
 import { Route as AppAdminRouteImport } from './routes/app.admin'
+import { Route as AppActivityRouteImport } from './routes/app.activity'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -81,6 +111,16 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppWritersRoute = AppWritersRouteImport.update({
+  id: '/writers',
+  path: '/writers',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppWorkspacesRoute = AppWorkspacesRouteImport.update({
+  id: '/workspaces',
+  path: '/workspaces',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppTemplatesRoute = AppTemplatesRouteImport.update({
   id: '/templates',
   path: '/templates',
@@ -89,6 +129,16 @@ const AppTemplatesRoute = AppTemplatesRouteImport.update({
 const AppTeamRoute = AppTeamRouteImport.update({
   id: '/team',
   path: '/team',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSystemRoute = AppSystemRouteImport.update({
+  id: '/system',
+  path: '/system',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSubscriptionsRoute = AppSubscriptionsRouteImport.update({
+  id: '/subscriptions',
+  path: '/subscriptions',
   getParentRoute: () => AppRoute,
 } as any)
 const AppSocialRoute = AppSocialRouteImport.update({
@@ -101,6 +151,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSerpRoute = AppSerpRouteImport.update({
+  id: '/serp',
+  path: '/serp',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSeoRoute = AppSeoRouteImport.update({
   id: '/seo',
   path: '/seo',
@@ -109,6 +164,26 @@ const AppSeoRoute = AppSeoRouteImport.update({
 const AppSchemaRoute = AppSchemaRouteImport.update({
   id: '/schema',
   path: '/schema',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRevenueRoute = AppRevenueRouteImport.update({
+  id: '/revenue',
+  path: '/revenue',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRequestsRoute = AppRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppReportsRoute = AppReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRankingsRoute = AppRankingsRouteImport.update({
+  id: '/rankings',
+  path: '/rankings',
   getParentRoute: () => AppRoute,
 } as any)
 const AppProjectsRoute = AppProjectsRouteImport.update({
@@ -121,9 +196,24 @@ const AppProductRoute = AppProductRouteImport.update({
   path: '/product',
   getParentRoute: () => AppRoute,
 } as any)
+const AppPortalRoute = AppPortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppPlagiarismRoute = AppPlagiarismRouteImport.update({
   id: '/plagiarism',
   path: '/plagiarism',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPipelineRoute = AppPipelineRouteImport.update({
+  id: '/pipeline',
+  path: '/pipeline',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOrdersRoute = AppOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
   getParentRoute: () => AppRoute,
 } as any)
 const AppNotificationsRoute = AppNotificationsRouteImport.update({
@@ -134,6 +224,16 @@ const AppNotificationsRoute = AppNotificationsRouteImport.update({
 const AppMetaRoute = AppMetaRouteImport.update({
   id: '/meta',
   path: '/meta',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMessagesRoute = AppMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMembersRoute = AppMembersRouteImport.update({
+  id: '/members',
+  path: '/members',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMediaRoute = AppMediaRouteImport.update({
@@ -156,6 +256,16 @@ const AppKeywordsRoute = AppKeywordsRouteImport.update({
   path: '/keywords',
   getParentRoute: () => AppRoute,
 } as any)
+const AppInvoicesRoute = AppInvoicesRouteImport.update({
+  id: '/invoices',
+  path: '/invoices',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInboxRoute = AppInboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppHumanizerRoute = AppHumanizerRouteImport.update({
   id: '/humanizer',
   path: '/humanizer',
@@ -166,9 +276,39 @@ const AppHelpRoute = AppHelpRouteImport.update({
   path: '/help',
   getParentRoute: () => AppRoute,
 } as any)
+const AppGapRoute = AppGapRouteImport.update({
+  id: '/gap',
+  path: '/gap',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFlagsRoute = AppFlagsRouteImport.update({
+  id: '/flags',
+  path: '/flags',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFilesRoute = AppFilesRouteImport.update({
+  id: '/files',
+  path: '/files',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFaqRoute = AppFaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppExportsRoute = AppExportsRouteImport.update({
+  id: '/exports',
+  path: '/exports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppExecRoute = AppExecRouteImport.update({
+  id: '/exec',
+  path: '/exec',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppErrorsRoute = AppErrorsRouteImport.update({
+  id: '/errors',
+  path: '/errors',
   getParentRoute: () => AppRoute,
 } as any)
 const AppEmailRoute = AppEmailRouteImport.update({
@@ -186,9 +326,34 @@ const AppDetectorRoute = AppDetectorRouteImport.update({
   path: '/detector',
   getParentRoute: () => AppRoute,
 } as any)
+const AppDecayRoute = AppDecayRouteImport.update({
+  id: '/decay',
+  path: '/decay',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCouponsRoute = AppCouponsRouteImport.update({
+  id: '/coupons',
+  path: '/coupons',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCompetitorsRoute = AppCompetitorsRouteImport.update({
+  id: '/competitors',
+  path: '/competitors',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppClustersRoute = AppClustersRouteImport.update({
+  id: '/clusters',
+  path: '/clusters',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCatalogRoute = AppCatalogRouteImport.update({
+  id: '/catalog',
+  path: '/catalog',
   getParentRoute: () => AppRoute,
 } as any)
 const AppBriefRoute = AppBriefRouteImport.update({
@@ -204,6 +369,16 @@ const AppBlogGeneratorRoute = AppBlogGeneratorRouteImport.update({
 const AppBillingRoute = AppBillingRouteImport.update({
   id: '/billing',
   path: '/billing',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBacklinksRoute = AppBacklinksRouteImport.update({
+  id: '/backlinks',
+  path: '/backlinks',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAuditRoute = AppAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
@@ -226,6 +401,11 @@ const AppAdminRoute = AppAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AppRoute,
 } as any)
+const AppActivityRoute = AppActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -234,35 +414,65 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/app/activity': typeof AppActivityRoute
   '/app/admin': typeof AppAdminRoute
   '/app/ads': typeof AppAdsRoute
   '/app/ai-writer': typeof AppAiWriterRoute
   '/app/analytics': typeof AppAnalyticsRoute
+  '/app/audit': typeof AppAuditRoute
+  '/app/backlinks': typeof AppBacklinksRoute
   '/app/billing': typeof AppBillingRoute
   '/app/blog-generator': typeof AppBlogGeneratorRoute
   '/app/brief': typeof AppBriefRoute
+  '/app/catalog': typeof AppCatalogRoute
+  '/app/clusters': typeof AppClustersRoute
+  '/app/competitors': typeof AppCompetitorsRoute
+  '/app/coupons': typeof AppCouponsRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/decay': typeof AppDecayRoute
   '/app/detector': typeof AppDetectorRoute
   '/app/documents': typeof AppDocumentsRoute
   '/app/email': typeof AppEmailRoute
+  '/app/errors': typeof AppErrorsRoute
+  '/app/exec': typeof AppExecRoute
+  '/app/exports': typeof AppExportsRoute
   '/app/faq': typeof AppFaqRoute
+  '/app/files': typeof AppFilesRoute
+  '/app/flags': typeof AppFlagsRoute
+  '/app/gap': typeof AppGapRoute
   '/app/help': typeof AppHelpRoute
   '/app/humanizer': typeof AppHumanizerRoute
+  '/app/inbox': typeof AppInboxRoute
+  '/app/invoices': typeof AppInvoicesRoute
   '/app/keywords': typeof AppKeywordsRoute
   '/app/landing': typeof AppLandingRoute
   '/app/library': typeof AppLibraryRoute
   '/app/media': typeof AppMediaRoute
+  '/app/members': typeof AppMembersRoute
+  '/app/messages': typeof AppMessagesRoute
   '/app/meta': typeof AppMetaRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/orders': typeof AppOrdersRoute
+  '/app/pipeline': typeof AppPipelineRoute
   '/app/plagiarism': typeof AppPlagiarismRoute
+  '/app/portal': typeof AppPortalRoute
   '/app/product': typeof AppProductRoute
   '/app/projects': typeof AppProjectsRoute
+  '/app/rankings': typeof AppRankingsRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/requests': typeof AppRequestsRoute
+  '/app/revenue': typeof AppRevenueRoute
   '/app/schema': typeof AppSchemaRoute
   '/app/seo': typeof AppSeoRoute
+  '/app/serp': typeof AppSerpRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/social': typeof AppSocialRoute
+  '/app/subscriptions': typeof AppSubscriptionsRoute
+  '/app/system': typeof AppSystemRoute
   '/app/team': typeof AppTeamRoute
   '/app/templates': typeof AppTemplatesRoute
+  '/app/workspaces': typeof AppWorkspacesRoute
+  '/app/writers': typeof AppWritersRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
@@ -271,35 +481,65 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/app/activity': typeof AppActivityRoute
   '/app/admin': typeof AppAdminRoute
   '/app/ads': typeof AppAdsRoute
   '/app/ai-writer': typeof AppAiWriterRoute
   '/app/analytics': typeof AppAnalyticsRoute
+  '/app/audit': typeof AppAuditRoute
+  '/app/backlinks': typeof AppBacklinksRoute
   '/app/billing': typeof AppBillingRoute
   '/app/blog-generator': typeof AppBlogGeneratorRoute
   '/app/brief': typeof AppBriefRoute
+  '/app/catalog': typeof AppCatalogRoute
+  '/app/clusters': typeof AppClustersRoute
+  '/app/competitors': typeof AppCompetitorsRoute
+  '/app/coupons': typeof AppCouponsRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/decay': typeof AppDecayRoute
   '/app/detector': typeof AppDetectorRoute
   '/app/documents': typeof AppDocumentsRoute
   '/app/email': typeof AppEmailRoute
+  '/app/errors': typeof AppErrorsRoute
+  '/app/exec': typeof AppExecRoute
+  '/app/exports': typeof AppExportsRoute
   '/app/faq': typeof AppFaqRoute
+  '/app/files': typeof AppFilesRoute
+  '/app/flags': typeof AppFlagsRoute
+  '/app/gap': typeof AppGapRoute
   '/app/help': typeof AppHelpRoute
   '/app/humanizer': typeof AppHumanizerRoute
+  '/app/inbox': typeof AppInboxRoute
+  '/app/invoices': typeof AppInvoicesRoute
   '/app/keywords': typeof AppKeywordsRoute
   '/app/landing': typeof AppLandingRoute
   '/app/library': typeof AppLibraryRoute
   '/app/media': typeof AppMediaRoute
+  '/app/members': typeof AppMembersRoute
+  '/app/messages': typeof AppMessagesRoute
   '/app/meta': typeof AppMetaRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/orders': typeof AppOrdersRoute
+  '/app/pipeline': typeof AppPipelineRoute
   '/app/plagiarism': typeof AppPlagiarismRoute
+  '/app/portal': typeof AppPortalRoute
   '/app/product': typeof AppProductRoute
   '/app/projects': typeof AppProjectsRoute
+  '/app/rankings': typeof AppRankingsRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/requests': typeof AppRequestsRoute
+  '/app/revenue': typeof AppRevenueRoute
   '/app/schema': typeof AppSchemaRoute
   '/app/seo': typeof AppSeoRoute
+  '/app/serp': typeof AppSerpRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/social': typeof AppSocialRoute
+  '/app/subscriptions': typeof AppSubscriptionsRoute
+  '/app/system': typeof AppSystemRoute
   '/app/team': typeof AppTeamRoute
   '/app/templates': typeof AppTemplatesRoute
+  '/app/workspaces': typeof AppWorkspacesRoute
+  '/app/writers': typeof AppWritersRoute
   '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
@@ -310,35 +550,65 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/app/activity': typeof AppActivityRoute
   '/app/admin': typeof AppAdminRoute
   '/app/ads': typeof AppAdsRoute
   '/app/ai-writer': typeof AppAiWriterRoute
   '/app/analytics': typeof AppAnalyticsRoute
+  '/app/audit': typeof AppAuditRoute
+  '/app/backlinks': typeof AppBacklinksRoute
   '/app/billing': typeof AppBillingRoute
   '/app/blog-generator': typeof AppBlogGeneratorRoute
   '/app/brief': typeof AppBriefRoute
+  '/app/catalog': typeof AppCatalogRoute
+  '/app/clusters': typeof AppClustersRoute
+  '/app/competitors': typeof AppCompetitorsRoute
+  '/app/coupons': typeof AppCouponsRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/decay': typeof AppDecayRoute
   '/app/detector': typeof AppDetectorRoute
   '/app/documents': typeof AppDocumentsRoute
   '/app/email': typeof AppEmailRoute
+  '/app/errors': typeof AppErrorsRoute
+  '/app/exec': typeof AppExecRoute
+  '/app/exports': typeof AppExportsRoute
   '/app/faq': typeof AppFaqRoute
+  '/app/files': typeof AppFilesRoute
+  '/app/flags': typeof AppFlagsRoute
+  '/app/gap': typeof AppGapRoute
   '/app/help': typeof AppHelpRoute
   '/app/humanizer': typeof AppHumanizerRoute
+  '/app/inbox': typeof AppInboxRoute
+  '/app/invoices': typeof AppInvoicesRoute
   '/app/keywords': typeof AppKeywordsRoute
   '/app/landing': typeof AppLandingRoute
   '/app/library': typeof AppLibraryRoute
   '/app/media': typeof AppMediaRoute
+  '/app/members': typeof AppMembersRoute
+  '/app/messages': typeof AppMessagesRoute
   '/app/meta': typeof AppMetaRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/orders': typeof AppOrdersRoute
+  '/app/pipeline': typeof AppPipelineRoute
   '/app/plagiarism': typeof AppPlagiarismRoute
+  '/app/portal': typeof AppPortalRoute
   '/app/product': typeof AppProductRoute
   '/app/projects': typeof AppProjectsRoute
+  '/app/rankings': typeof AppRankingsRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/requests': typeof AppRequestsRoute
+  '/app/revenue': typeof AppRevenueRoute
   '/app/schema': typeof AppSchemaRoute
   '/app/seo': typeof AppSeoRoute
+  '/app/serp': typeof AppSerpRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/social': typeof AppSocialRoute
+  '/app/subscriptions': typeof AppSubscriptionsRoute
+  '/app/system': typeof AppSystemRoute
   '/app/team': typeof AppTeamRoute
   '/app/templates': typeof AppTemplatesRoute
+  '/app/workspaces': typeof AppWorkspacesRoute
+  '/app/writers': typeof AppWritersRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
@@ -350,35 +620,65 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/verify-email'
+    | '/app/activity'
     | '/app/admin'
     | '/app/ads'
     | '/app/ai-writer'
     | '/app/analytics'
+    | '/app/audit'
+    | '/app/backlinks'
     | '/app/billing'
     | '/app/blog-generator'
     | '/app/brief'
+    | '/app/catalog'
+    | '/app/clusters'
+    | '/app/competitors'
+    | '/app/coupons'
     | '/app/dashboard'
+    | '/app/decay'
     | '/app/detector'
     | '/app/documents'
     | '/app/email'
+    | '/app/errors'
+    | '/app/exec'
+    | '/app/exports'
     | '/app/faq'
+    | '/app/files'
+    | '/app/flags'
+    | '/app/gap'
     | '/app/help'
     | '/app/humanizer'
+    | '/app/inbox'
+    | '/app/invoices'
     | '/app/keywords'
     | '/app/landing'
     | '/app/library'
     | '/app/media'
+    | '/app/members'
+    | '/app/messages'
     | '/app/meta'
     | '/app/notifications'
+    | '/app/orders'
+    | '/app/pipeline'
     | '/app/plagiarism'
+    | '/app/portal'
     | '/app/product'
     | '/app/projects'
+    | '/app/rankings'
+    | '/app/reports'
+    | '/app/requests'
+    | '/app/revenue'
     | '/app/schema'
     | '/app/seo'
+    | '/app/serp'
     | '/app/settings'
     | '/app/social'
+    | '/app/subscriptions'
+    | '/app/system'
     | '/app/team'
     | '/app/templates'
+    | '/app/workspaces'
+    | '/app/writers'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -387,35 +687,65 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/verify-email'
+    | '/app/activity'
     | '/app/admin'
     | '/app/ads'
     | '/app/ai-writer'
     | '/app/analytics'
+    | '/app/audit'
+    | '/app/backlinks'
     | '/app/billing'
     | '/app/blog-generator'
     | '/app/brief'
+    | '/app/catalog'
+    | '/app/clusters'
+    | '/app/competitors'
+    | '/app/coupons'
     | '/app/dashboard'
+    | '/app/decay'
     | '/app/detector'
     | '/app/documents'
     | '/app/email'
+    | '/app/errors'
+    | '/app/exec'
+    | '/app/exports'
     | '/app/faq'
+    | '/app/files'
+    | '/app/flags'
+    | '/app/gap'
     | '/app/help'
     | '/app/humanizer'
+    | '/app/inbox'
+    | '/app/invoices'
     | '/app/keywords'
     | '/app/landing'
     | '/app/library'
     | '/app/media'
+    | '/app/members'
+    | '/app/messages'
     | '/app/meta'
     | '/app/notifications'
+    | '/app/orders'
+    | '/app/pipeline'
     | '/app/plagiarism'
+    | '/app/portal'
     | '/app/product'
     | '/app/projects'
+    | '/app/rankings'
+    | '/app/reports'
+    | '/app/requests'
+    | '/app/revenue'
     | '/app/schema'
     | '/app/seo'
+    | '/app/serp'
     | '/app/settings'
     | '/app/social'
+    | '/app/subscriptions'
+    | '/app/system'
     | '/app/team'
     | '/app/templates'
+    | '/app/workspaces'
+    | '/app/writers'
     | '/app'
   id:
     | '__root__'
@@ -425,35 +755,65 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/verify-email'
+    | '/app/activity'
     | '/app/admin'
     | '/app/ads'
     | '/app/ai-writer'
     | '/app/analytics'
+    | '/app/audit'
+    | '/app/backlinks'
     | '/app/billing'
     | '/app/blog-generator'
     | '/app/brief'
+    | '/app/catalog'
+    | '/app/clusters'
+    | '/app/competitors'
+    | '/app/coupons'
     | '/app/dashboard'
+    | '/app/decay'
     | '/app/detector'
     | '/app/documents'
     | '/app/email'
+    | '/app/errors'
+    | '/app/exec'
+    | '/app/exports'
     | '/app/faq'
+    | '/app/files'
+    | '/app/flags'
+    | '/app/gap'
     | '/app/help'
     | '/app/humanizer'
+    | '/app/inbox'
+    | '/app/invoices'
     | '/app/keywords'
     | '/app/landing'
     | '/app/library'
     | '/app/media'
+    | '/app/members'
+    | '/app/messages'
     | '/app/meta'
     | '/app/notifications'
+    | '/app/orders'
+    | '/app/pipeline'
     | '/app/plagiarism'
+    | '/app/portal'
     | '/app/product'
     | '/app/projects'
+    | '/app/rankings'
+    | '/app/reports'
+    | '/app/requests'
+    | '/app/revenue'
     | '/app/schema'
     | '/app/seo'
+    | '/app/serp'
     | '/app/settings'
     | '/app/social'
+    | '/app/subscriptions'
+    | '/app/system'
     | '/app/team'
     | '/app/templates'
+    | '/app/workspaces'
+    | '/app/writers'
     | '/app/'
   fileRoutesById: FileRoutesById
 }
@@ -517,6 +877,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/writers': {
+      id: '/app/writers'
+      path: '/writers'
+      fullPath: '/app/writers'
+      preLoaderRoute: typeof AppWritersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/workspaces': {
+      id: '/app/workspaces'
+      path: '/workspaces'
+      fullPath: '/app/workspaces'
+      preLoaderRoute: typeof AppWorkspacesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/templates': {
       id: '/app/templates'
       path: '/templates'
@@ -529,6 +903,20 @@ declare module '@tanstack/react-router' {
       path: '/team'
       fullPath: '/app/team'
       preLoaderRoute: typeof AppTeamRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/system': {
+      id: '/app/system'
+      path: '/system'
+      fullPath: '/app/system'
+      preLoaderRoute: typeof AppSystemRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/subscriptions': {
+      id: '/app/subscriptions'
+      path: '/subscriptions'
+      fullPath: '/app/subscriptions'
+      preLoaderRoute: typeof AppSubscriptionsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/social': {
@@ -545,6 +933,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/serp': {
+      id: '/app/serp'
+      path: '/serp'
+      fullPath: '/app/serp'
+      preLoaderRoute: typeof AppSerpRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/seo': {
       id: '/app/seo'
       path: '/seo'
@@ -557,6 +952,34 @@ declare module '@tanstack/react-router' {
       path: '/schema'
       fullPath: '/app/schema'
       preLoaderRoute: typeof AppSchemaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/revenue': {
+      id: '/app/revenue'
+      path: '/revenue'
+      fullPath: '/app/revenue'
+      preLoaderRoute: typeof AppRevenueRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/requests': {
+      id: '/app/requests'
+      path: '/requests'
+      fullPath: '/app/requests'
+      preLoaderRoute: typeof AppRequestsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/reports': {
+      id: '/app/reports'
+      path: '/reports'
+      fullPath: '/app/reports'
+      preLoaderRoute: typeof AppReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/rankings': {
+      id: '/app/rankings'
+      path: '/rankings'
+      fullPath: '/app/rankings'
+      preLoaderRoute: typeof AppRankingsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/projects': {
@@ -573,11 +996,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProductRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/portal': {
+      id: '/app/portal'
+      path: '/portal'
+      fullPath: '/app/portal'
+      preLoaderRoute: typeof AppPortalRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/plagiarism': {
       id: '/app/plagiarism'
       path: '/plagiarism'
       fullPath: '/app/plagiarism'
       preLoaderRoute: typeof AppPlagiarismRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/pipeline': {
+      id: '/app/pipeline'
+      path: '/pipeline'
+      fullPath: '/app/pipeline'
+      preLoaderRoute: typeof AppPipelineRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/orders': {
+      id: '/app/orders'
+      path: '/orders'
+      fullPath: '/app/orders'
+      preLoaderRoute: typeof AppOrdersRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/notifications': {
@@ -592,6 +1036,20 @@ declare module '@tanstack/react-router' {
       path: '/meta'
       fullPath: '/app/meta'
       preLoaderRoute: typeof AppMetaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/messages': {
+      id: '/app/messages'
+      path: '/messages'
+      fullPath: '/app/messages'
+      preLoaderRoute: typeof AppMessagesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/members': {
+      id: '/app/members'
+      path: '/members'
+      fullPath: '/app/members'
+      preLoaderRoute: typeof AppMembersRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/media': {
@@ -622,6 +1080,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppKeywordsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/invoices': {
+      id: '/app/invoices'
+      path: '/invoices'
+      fullPath: '/app/invoices'
+      preLoaderRoute: typeof AppInvoicesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/inbox': {
+      id: '/app/inbox'
+      path: '/inbox'
+      fullPath: '/app/inbox'
+      preLoaderRoute: typeof AppInboxRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/humanizer': {
       id: '/app/humanizer'
       path: '/humanizer'
@@ -636,11 +1108,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHelpRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/gap': {
+      id: '/app/gap'
+      path: '/gap'
+      fullPath: '/app/gap'
+      preLoaderRoute: typeof AppGapRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/flags': {
+      id: '/app/flags'
+      path: '/flags'
+      fullPath: '/app/flags'
+      preLoaderRoute: typeof AppFlagsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/files': {
+      id: '/app/files'
+      path: '/files'
+      fullPath: '/app/files'
+      preLoaderRoute: typeof AppFilesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/faq': {
       id: '/app/faq'
       path: '/faq'
       fullPath: '/app/faq'
       preLoaderRoute: typeof AppFaqRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/exports': {
+      id: '/app/exports'
+      path: '/exports'
+      fullPath: '/app/exports'
+      preLoaderRoute: typeof AppExportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/exec': {
+      id: '/app/exec'
+      path: '/exec'
+      fullPath: '/app/exec'
+      preLoaderRoute: typeof AppExecRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/errors': {
+      id: '/app/errors'
+      path: '/errors'
+      fullPath: '/app/errors'
+      preLoaderRoute: typeof AppErrorsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/email': {
@@ -664,11 +1178,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDetectorRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/decay': {
+      id: '/app/decay'
+      path: '/decay'
+      fullPath: '/app/decay'
+      preLoaderRoute: typeof AppDecayRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/dashboard': {
       id: '/app/dashboard'
       path: '/dashboard'
       fullPath: '/app/dashboard'
       preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/coupons': {
+      id: '/app/coupons'
+      path: '/coupons'
+      fullPath: '/app/coupons'
+      preLoaderRoute: typeof AppCouponsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/competitors': {
+      id: '/app/competitors'
+      path: '/competitors'
+      fullPath: '/app/competitors'
+      preLoaderRoute: typeof AppCompetitorsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/clusters': {
+      id: '/app/clusters'
+      path: '/clusters'
+      fullPath: '/app/clusters'
+      preLoaderRoute: typeof AppClustersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/catalog': {
+      id: '/app/catalog'
+      path: '/catalog'
+      fullPath: '/app/catalog'
+      preLoaderRoute: typeof AppCatalogRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/brief': {
@@ -690,6 +1239,20 @@ declare module '@tanstack/react-router' {
       path: '/billing'
       fullPath: '/app/billing'
       preLoaderRoute: typeof AppBillingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/backlinks': {
+      id: '/app/backlinks'
+      path: '/backlinks'
+      fullPath: '/app/backlinks'
+      preLoaderRoute: typeof AppBacklinksRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/audit': {
+      id: '/app/audit'
+      path: '/audit'
+      fullPath: '/app/audit'
+      preLoaderRoute: typeof AppAuditRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/analytics': {
@@ -720,72 +1283,139 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/activity': {
+      id: '/app/activity'
+      path: '/activity'
+      fullPath: '/app/activity'
+      preLoaderRoute: typeof AppActivityRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppActivityRoute: typeof AppActivityRoute
   AppAdminRoute: typeof AppAdminRoute
   AppAdsRoute: typeof AppAdsRoute
   AppAiWriterRoute: typeof AppAiWriterRoute
   AppAnalyticsRoute: typeof AppAnalyticsRoute
+  AppAuditRoute: typeof AppAuditRoute
+  AppBacklinksRoute: typeof AppBacklinksRoute
   AppBillingRoute: typeof AppBillingRoute
   AppBlogGeneratorRoute: typeof AppBlogGeneratorRoute
   AppBriefRoute: typeof AppBriefRoute
+  AppCatalogRoute: typeof AppCatalogRoute
+  AppClustersRoute: typeof AppClustersRoute
+  AppCompetitorsRoute: typeof AppCompetitorsRoute
+  AppCouponsRoute: typeof AppCouponsRoute
   AppDashboardRoute: typeof AppDashboardRoute
+  AppDecayRoute: typeof AppDecayRoute
   AppDetectorRoute: typeof AppDetectorRoute
   AppDocumentsRoute: typeof AppDocumentsRoute
   AppEmailRoute: typeof AppEmailRoute
+  AppErrorsRoute: typeof AppErrorsRoute
+  AppExecRoute: typeof AppExecRoute
+  AppExportsRoute: typeof AppExportsRoute
   AppFaqRoute: typeof AppFaqRoute
+  AppFilesRoute: typeof AppFilesRoute
+  AppFlagsRoute: typeof AppFlagsRoute
+  AppGapRoute: typeof AppGapRoute
   AppHelpRoute: typeof AppHelpRoute
   AppHumanizerRoute: typeof AppHumanizerRoute
+  AppInboxRoute: typeof AppInboxRoute
+  AppInvoicesRoute: typeof AppInvoicesRoute
   AppKeywordsRoute: typeof AppKeywordsRoute
   AppLandingRoute: typeof AppLandingRoute
   AppLibraryRoute: typeof AppLibraryRoute
   AppMediaRoute: typeof AppMediaRoute
+  AppMembersRoute: typeof AppMembersRoute
+  AppMessagesRoute: typeof AppMessagesRoute
   AppMetaRoute: typeof AppMetaRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
+  AppOrdersRoute: typeof AppOrdersRoute
+  AppPipelineRoute: typeof AppPipelineRoute
   AppPlagiarismRoute: typeof AppPlagiarismRoute
+  AppPortalRoute: typeof AppPortalRoute
   AppProductRoute: typeof AppProductRoute
   AppProjectsRoute: typeof AppProjectsRoute
+  AppRankingsRoute: typeof AppRankingsRoute
+  AppReportsRoute: typeof AppReportsRoute
+  AppRequestsRoute: typeof AppRequestsRoute
+  AppRevenueRoute: typeof AppRevenueRoute
   AppSchemaRoute: typeof AppSchemaRoute
   AppSeoRoute: typeof AppSeoRoute
+  AppSerpRoute: typeof AppSerpRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppSocialRoute: typeof AppSocialRoute
+  AppSubscriptionsRoute: typeof AppSubscriptionsRoute
+  AppSystemRoute: typeof AppSystemRoute
   AppTeamRoute: typeof AppTeamRoute
   AppTemplatesRoute: typeof AppTemplatesRoute
+  AppWorkspacesRoute: typeof AppWorkspacesRoute
+  AppWritersRoute: typeof AppWritersRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppActivityRoute: AppActivityRoute,
   AppAdminRoute: AppAdminRoute,
   AppAdsRoute: AppAdsRoute,
   AppAiWriterRoute: AppAiWriterRoute,
   AppAnalyticsRoute: AppAnalyticsRoute,
+  AppAuditRoute: AppAuditRoute,
+  AppBacklinksRoute: AppBacklinksRoute,
   AppBillingRoute: AppBillingRoute,
   AppBlogGeneratorRoute: AppBlogGeneratorRoute,
   AppBriefRoute: AppBriefRoute,
+  AppCatalogRoute: AppCatalogRoute,
+  AppClustersRoute: AppClustersRoute,
+  AppCompetitorsRoute: AppCompetitorsRoute,
+  AppCouponsRoute: AppCouponsRoute,
   AppDashboardRoute: AppDashboardRoute,
+  AppDecayRoute: AppDecayRoute,
   AppDetectorRoute: AppDetectorRoute,
   AppDocumentsRoute: AppDocumentsRoute,
   AppEmailRoute: AppEmailRoute,
+  AppErrorsRoute: AppErrorsRoute,
+  AppExecRoute: AppExecRoute,
+  AppExportsRoute: AppExportsRoute,
   AppFaqRoute: AppFaqRoute,
+  AppFilesRoute: AppFilesRoute,
+  AppFlagsRoute: AppFlagsRoute,
+  AppGapRoute: AppGapRoute,
   AppHelpRoute: AppHelpRoute,
   AppHumanizerRoute: AppHumanizerRoute,
+  AppInboxRoute: AppInboxRoute,
+  AppInvoicesRoute: AppInvoicesRoute,
   AppKeywordsRoute: AppKeywordsRoute,
   AppLandingRoute: AppLandingRoute,
   AppLibraryRoute: AppLibraryRoute,
   AppMediaRoute: AppMediaRoute,
+  AppMembersRoute: AppMembersRoute,
+  AppMessagesRoute: AppMessagesRoute,
   AppMetaRoute: AppMetaRoute,
   AppNotificationsRoute: AppNotificationsRoute,
+  AppOrdersRoute: AppOrdersRoute,
+  AppPipelineRoute: AppPipelineRoute,
   AppPlagiarismRoute: AppPlagiarismRoute,
+  AppPortalRoute: AppPortalRoute,
   AppProductRoute: AppProductRoute,
   AppProjectsRoute: AppProjectsRoute,
+  AppRankingsRoute: AppRankingsRoute,
+  AppReportsRoute: AppReportsRoute,
+  AppRequestsRoute: AppRequestsRoute,
+  AppRevenueRoute: AppRevenueRoute,
   AppSchemaRoute: AppSchemaRoute,
   AppSeoRoute: AppSeoRoute,
+  AppSerpRoute: AppSerpRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppSocialRoute: AppSocialRoute,
+  AppSubscriptionsRoute: AppSubscriptionsRoute,
+  AppSystemRoute: AppSystemRoute,
   AppTeamRoute: AppTeamRoute,
   AppTemplatesRoute: AppTemplatesRoute,
+  AppWorkspacesRoute: AppWorkspacesRoute,
+  AppWritersRoute: AppWritersRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
@@ -802,13 +1432,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

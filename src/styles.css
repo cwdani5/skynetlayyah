@@ -155,3 +155,7 @@
   backdrop-filter: blur(14px) saturate(140%);
   border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
 }
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
