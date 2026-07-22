@@ -16,6 +16,9 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppHumanizerRouteImport } from './routes/app.humanizer'
+import { Route as AppDetectorRouteImport } from './routes/app.detector'
+import { Route as AppDashboardRouteImport } from './routes/app.dashboard'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -52,6 +55,21 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppHumanizerRoute = AppHumanizerRouteImport.update({
+  id: '/humanizer',
+  path: '/humanizer',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDetectorRoute = AppDetectorRouteImport.update({
+  id: '/detector',
+  path: '/detector',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,6 +78,9 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/detector': typeof AppDetectorRoute
+  '/app/humanizer': typeof AppHumanizerRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
@@ -68,6 +89,9 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/detector': typeof AppDetectorRoute
+  '/app/humanizer': typeof AppHumanizerRoute
   '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
@@ -78,6 +102,9 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/detector': typeof AppDetectorRoute
+  '/app/humanizer': typeof AppHumanizerRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
@@ -89,9 +116,21 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/verify-email'
+    | '/app/dashboard'
+    | '/app/detector'
+    | '/app/humanizer'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/forgot-password' | '/login' | '/signup' | '/verify-email' | '/app'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
+    | '/verify-email'
+    | '/app/dashboard'
+    | '/app/detector'
+    | '/app/humanizer'
+    | '/app'
   id:
     | '__root__'
     | '/'
@@ -100,6 +139,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/verify-email'
+    | '/app/dashboard'
+    | '/app/detector'
+    | '/app/humanizer'
     | '/app/'
   fileRoutesById: FileRoutesById
 }
@@ -163,14 +205,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/humanizer': {
+      id: '/app/humanizer'
+      path: '/humanizer'
+      fullPath: '/app/humanizer'
+      preLoaderRoute: typeof AppHumanizerRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/detector': {
+      id: '/app/detector'
+      path: '/detector'
+      fullPath: '/app/detector'
+      preLoaderRoute: typeof AppDetectorRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/dashboard': {
+      id: '/app/dashboard'
+      path: '/dashboard'
+      fullPath: '/app/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppDetectorRoute: typeof AppDetectorRoute
+  AppHumanizerRoute: typeof AppHumanizerRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppDashboardRoute: AppDashboardRoute,
+  AppDetectorRoute: AppDetectorRoute,
+  AppHumanizerRoute: AppHumanizerRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
