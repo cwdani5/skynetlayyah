@@ -9,9 +9,10 @@ function ToolsLayout() {
     <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-3xl px-6 py-12">
         <header className="flex items-center justify-between text-sm">
-          <Link to="/" className="font-medium hover:opacity-70 transition">
-            ← Home
+          <Link to="/tools/humanizer" className="font-[family-name:var(--font-serif)] text-lg hover:opacity-70 transition">
+            AI Humanizer
           </Link>
+
           <nav className="flex gap-6 text-muted-foreground">
             <Link
               to="/tools/humanizer"
