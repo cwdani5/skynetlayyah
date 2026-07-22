@@ -17,17 +17,22 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppTemplatesRouteImport } from './routes/app.templates'
+import { Route as AppTeamRouteImport } from './routes/app.team'
 import { Route as AppSocialRouteImport } from './routes/app.social'
+import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppSeoRouteImport } from './routes/app.seo'
 import { Route as AppSchemaRouteImport } from './routes/app.schema'
 import { Route as AppProjectsRouteImport } from './routes/app.projects'
 import { Route as AppProductRouteImport } from './routes/app.product'
 import { Route as AppPlagiarismRouteImport } from './routes/app.plagiarism'
+import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
 import { Route as AppMetaRouteImport } from './routes/app.meta'
 import { Route as AppMediaRouteImport } from './routes/app.media'
+import { Route as AppLibraryRouteImport } from './routes/app.library'
 import { Route as AppLandingRouteImport } from './routes/app.landing'
 import { Route as AppKeywordsRouteImport } from './routes/app.keywords'
 import { Route as AppHumanizerRouteImport } from './routes/app.humanizer'
+import { Route as AppHelpRouteImport } from './routes/app.help'
 import { Route as AppFaqRouteImport } from './routes/app.faq'
 import { Route as AppEmailRouteImport } from './routes/app.email'
 import { Route as AppDocumentsRouteImport } from './routes/app.documents'
@@ -39,6 +44,7 @@ import { Route as AppBillingRouteImport } from './routes/app.billing'
 import { Route as AppAnalyticsRouteImport } from './routes/app.analytics'
 import { Route as AppAiWriterRouteImport } from './routes/app.ai-writer'
 import { Route as AppAdsRouteImport } from './routes/app.ads'
+import { Route as AppAdminRouteImport } from './routes/app.admin'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -80,9 +86,19 @@ const AppTemplatesRoute = AppTemplatesRouteImport.update({
   path: '/templates',
   getParentRoute: () => AppRoute,
 } as any)
+const AppTeamRoute = AppTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSocialRoute = AppSocialRouteImport.update({
   id: '/social',
   path: '/social',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
 const AppSeoRoute = AppSeoRouteImport.update({
@@ -110,6 +126,11 @@ const AppPlagiarismRoute = AppPlagiarismRouteImport.update({
   path: '/plagiarism',
   getParentRoute: () => AppRoute,
 } as any)
+const AppNotificationsRoute = AppNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMetaRoute = AppMetaRouteImport.update({
   id: '/meta',
   path: '/meta',
@@ -118,6 +139,11 @@ const AppMetaRoute = AppMetaRouteImport.update({
 const AppMediaRoute = AppMediaRouteImport.update({
   id: '/media',
   path: '/media',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLibraryRoute = AppLibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
   getParentRoute: () => AppRoute,
 } as any)
 const AppLandingRoute = AppLandingRouteImport.update({
@@ -133,6 +159,11 @@ const AppKeywordsRoute = AppKeywordsRouteImport.update({
 const AppHumanizerRoute = AppHumanizerRouteImport.update({
   id: '/humanizer',
   path: '/humanizer',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHelpRoute = AppHelpRouteImport.update({
+  id: '/help',
+  path: '/help',
   getParentRoute: () => AppRoute,
 } as any)
 const AppFaqRoute = AppFaqRouteImport.update({
@@ -190,6 +221,11 @@ const AppAdsRoute = AppAdsRouteImport.update({
   path: '/ads',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAdminRoute = AppAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -198,6 +234,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/app/admin': typeof AppAdminRoute
   '/app/ads': typeof AppAdsRoute
   '/app/ai-writer': typeof AppAiWriterRoute
   '/app/analytics': typeof AppAnalyticsRoute
@@ -209,17 +246,22 @@ export interface FileRoutesByFullPath {
   '/app/documents': typeof AppDocumentsRoute
   '/app/email': typeof AppEmailRoute
   '/app/faq': typeof AppFaqRoute
+  '/app/help': typeof AppHelpRoute
   '/app/humanizer': typeof AppHumanizerRoute
   '/app/keywords': typeof AppKeywordsRoute
   '/app/landing': typeof AppLandingRoute
+  '/app/library': typeof AppLibraryRoute
   '/app/media': typeof AppMediaRoute
   '/app/meta': typeof AppMetaRoute
+  '/app/notifications': typeof AppNotificationsRoute
   '/app/plagiarism': typeof AppPlagiarismRoute
   '/app/product': typeof AppProductRoute
   '/app/projects': typeof AppProjectsRoute
   '/app/schema': typeof AppSchemaRoute
   '/app/seo': typeof AppSeoRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/social': typeof AppSocialRoute
+  '/app/team': typeof AppTeamRoute
   '/app/templates': typeof AppTemplatesRoute
   '/app/': typeof AppIndexRoute
 }
@@ -229,6 +271,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/app/admin': typeof AppAdminRoute
   '/app/ads': typeof AppAdsRoute
   '/app/ai-writer': typeof AppAiWriterRoute
   '/app/analytics': typeof AppAnalyticsRoute
@@ -240,17 +283,22 @@ export interface FileRoutesByTo {
   '/app/documents': typeof AppDocumentsRoute
   '/app/email': typeof AppEmailRoute
   '/app/faq': typeof AppFaqRoute
+  '/app/help': typeof AppHelpRoute
   '/app/humanizer': typeof AppHumanizerRoute
   '/app/keywords': typeof AppKeywordsRoute
   '/app/landing': typeof AppLandingRoute
+  '/app/library': typeof AppLibraryRoute
   '/app/media': typeof AppMediaRoute
   '/app/meta': typeof AppMetaRoute
+  '/app/notifications': typeof AppNotificationsRoute
   '/app/plagiarism': typeof AppPlagiarismRoute
   '/app/product': typeof AppProductRoute
   '/app/projects': typeof AppProjectsRoute
   '/app/schema': typeof AppSchemaRoute
   '/app/seo': typeof AppSeoRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/social': typeof AppSocialRoute
+  '/app/team': typeof AppTeamRoute
   '/app/templates': typeof AppTemplatesRoute
   '/app': typeof AppIndexRoute
 }
@@ -262,6 +310,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/app/admin': typeof AppAdminRoute
   '/app/ads': typeof AppAdsRoute
   '/app/ai-writer': typeof AppAiWriterRoute
   '/app/analytics': typeof AppAnalyticsRoute
@@ -273,17 +322,22 @@ export interface FileRoutesById {
   '/app/documents': typeof AppDocumentsRoute
   '/app/email': typeof AppEmailRoute
   '/app/faq': typeof AppFaqRoute
+  '/app/help': typeof AppHelpRoute
   '/app/humanizer': typeof AppHumanizerRoute
   '/app/keywords': typeof AppKeywordsRoute
   '/app/landing': typeof AppLandingRoute
+  '/app/library': typeof AppLibraryRoute
   '/app/media': typeof AppMediaRoute
   '/app/meta': typeof AppMetaRoute
+  '/app/notifications': typeof AppNotificationsRoute
   '/app/plagiarism': typeof AppPlagiarismRoute
   '/app/product': typeof AppProductRoute
   '/app/projects': typeof AppProjectsRoute
   '/app/schema': typeof AppSchemaRoute
   '/app/seo': typeof AppSeoRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/social': typeof AppSocialRoute
+  '/app/team': typeof AppTeamRoute
   '/app/templates': typeof AppTemplatesRoute
   '/app/': typeof AppIndexRoute
 }
@@ -296,6 +350,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/verify-email'
+    | '/app/admin'
     | '/app/ads'
     | '/app/ai-writer'
     | '/app/analytics'
@@ -307,17 +362,22 @@ export interface FileRouteTypes {
     | '/app/documents'
     | '/app/email'
     | '/app/faq'
+    | '/app/help'
     | '/app/humanizer'
     | '/app/keywords'
     | '/app/landing'
+    | '/app/library'
     | '/app/media'
     | '/app/meta'
+    | '/app/notifications'
     | '/app/plagiarism'
     | '/app/product'
     | '/app/projects'
     | '/app/schema'
     | '/app/seo'
+    | '/app/settings'
     | '/app/social'
+    | '/app/team'
     | '/app/templates'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
@@ -327,6 +387,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/verify-email'
+    | '/app/admin'
     | '/app/ads'
     | '/app/ai-writer'
     | '/app/analytics'
@@ -338,17 +399,22 @@ export interface FileRouteTypes {
     | '/app/documents'
     | '/app/email'
     | '/app/faq'
+    | '/app/help'
     | '/app/humanizer'
     | '/app/keywords'
     | '/app/landing'
+    | '/app/library'
     | '/app/media'
     | '/app/meta'
+    | '/app/notifications'
     | '/app/plagiarism'
     | '/app/product'
     | '/app/projects'
     | '/app/schema'
     | '/app/seo'
+    | '/app/settings'
     | '/app/social'
+    | '/app/team'
     | '/app/templates'
     | '/app'
   id:
@@ -359,6 +425,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/verify-email'
+    | '/app/admin'
     | '/app/ads'
     | '/app/ai-writer'
     | '/app/analytics'
@@ -370,17 +437,22 @@ export interface FileRouteTypes {
     | '/app/documents'
     | '/app/email'
     | '/app/faq'
+    | '/app/help'
     | '/app/humanizer'
     | '/app/keywords'
     | '/app/landing'
+    | '/app/library'
     | '/app/media'
     | '/app/meta'
+    | '/app/notifications'
     | '/app/plagiarism'
     | '/app/product'
     | '/app/projects'
     | '/app/schema'
     | '/app/seo'
+    | '/app/settings'
     | '/app/social'
+    | '/app/team'
     | '/app/templates'
     | '/app/'
   fileRoutesById: FileRoutesById
@@ -452,11 +524,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTemplatesRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/team': {
+      id: '/app/team'
+      path: '/team'
+      fullPath: '/app/team'
+      preLoaderRoute: typeof AppTeamRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/social': {
       id: '/app/social'
       path: '/social'
       fullPath: '/app/social'
       preLoaderRoute: typeof AppSocialRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/seo': {
@@ -494,6 +580,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPlagiarismRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/notifications': {
+      id: '/app/notifications'
+      path: '/notifications'
+      fullPath: '/app/notifications'
+      preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/meta': {
       id: '/app/meta'
       path: '/meta'
@@ -506,6 +599,13 @@ declare module '@tanstack/react-router' {
       path: '/media'
       fullPath: '/app/media'
       preLoaderRoute: typeof AppMediaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/library': {
+      id: '/app/library'
+      path: '/library'
+      fullPath: '/app/library'
+      preLoaderRoute: typeof AppLibraryRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/landing': {
@@ -527,6 +627,13 @@ declare module '@tanstack/react-router' {
       path: '/humanizer'
       fullPath: '/app/humanizer'
       preLoaderRoute: typeof AppHumanizerRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/help': {
+      id: '/app/help'
+      path: '/help'
+      fullPath: '/app/help'
+      preLoaderRoute: typeof AppHelpRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/faq': {
@@ -606,10 +713,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/admin': {
+      id: '/app/admin'
+      path: '/admin'
+      fullPath: '/app/admin'
+      preLoaderRoute: typeof AppAdminRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppAdminRoute: typeof AppAdminRoute
   AppAdsRoute: typeof AppAdsRoute
   AppAiWriterRoute: typeof AppAiWriterRoute
   AppAnalyticsRoute: typeof AppAnalyticsRoute
@@ -621,22 +736,28 @@ interface AppRouteChildren {
   AppDocumentsRoute: typeof AppDocumentsRoute
   AppEmailRoute: typeof AppEmailRoute
   AppFaqRoute: typeof AppFaqRoute
+  AppHelpRoute: typeof AppHelpRoute
   AppHumanizerRoute: typeof AppHumanizerRoute
   AppKeywordsRoute: typeof AppKeywordsRoute
   AppLandingRoute: typeof AppLandingRoute
+  AppLibraryRoute: typeof AppLibraryRoute
   AppMediaRoute: typeof AppMediaRoute
   AppMetaRoute: typeof AppMetaRoute
+  AppNotificationsRoute: typeof AppNotificationsRoute
   AppPlagiarismRoute: typeof AppPlagiarismRoute
   AppProductRoute: typeof AppProductRoute
   AppProjectsRoute: typeof AppProjectsRoute
   AppSchemaRoute: typeof AppSchemaRoute
   AppSeoRoute: typeof AppSeoRoute
+  AppSettingsRoute: typeof AppSettingsRoute
   AppSocialRoute: typeof AppSocialRoute
+  AppTeamRoute: typeof AppTeamRoute
   AppTemplatesRoute: typeof AppTemplatesRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAdminRoute: AppAdminRoute,
   AppAdsRoute: AppAdsRoute,
   AppAiWriterRoute: AppAiWriterRoute,
   AppAnalyticsRoute: AppAnalyticsRoute,
@@ -648,17 +769,22 @@ const AppRouteChildren: AppRouteChildren = {
   AppDocumentsRoute: AppDocumentsRoute,
   AppEmailRoute: AppEmailRoute,
   AppFaqRoute: AppFaqRoute,
+  AppHelpRoute: AppHelpRoute,
   AppHumanizerRoute: AppHumanizerRoute,
   AppKeywordsRoute: AppKeywordsRoute,
   AppLandingRoute: AppLandingRoute,
+  AppLibraryRoute: AppLibraryRoute,
   AppMediaRoute: AppMediaRoute,
   AppMetaRoute: AppMetaRoute,
+  AppNotificationsRoute: AppNotificationsRoute,
   AppPlagiarismRoute: AppPlagiarismRoute,
   AppProductRoute: AppProductRoute,
   AppProjectsRoute: AppProjectsRoute,
   AppSchemaRoute: AppSchemaRoute,
   AppSeoRoute: AppSeoRoute,
+  AppSettingsRoute: AppSettingsRoute,
   AppSocialRoute: AppSocialRoute,
+  AppTeamRoute: AppTeamRoute,
   AppTemplatesRoute: AppTemplatesRoute,
   AppIndexRoute: AppIndexRoute,
 }
