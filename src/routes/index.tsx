@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -41,6 +41,7 @@ function Index() {
           <nav className="flex gap-6 text-muted-foreground">
             <a href="#work" className="hover:text-foreground transition-colors">Work</a>
             <a href="#about" className="hover:text-foreground transition-colors">About</a>
+            <Link to="/tools/humanizer" className="hover:text-foreground transition-colors">Tools</Link>
             <a href="mailto:hello@example.com" className="hover:text-foreground transition-colors">Contact</a>
           </nav>
         </header>
