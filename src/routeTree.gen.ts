@@ -19,10 +19,13 @@ import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppSeoRouteImport } from './routes/app.seo'
 import { Route as AppProjectsRouteImport } from './routes/app.projects'
 import { Route as AppPlagiarismRouteImport } from './routes/app.plagiarism'
+import { Route as AppMediaRouteImport } from './routes/app.media'
 import { Route as AppKeywordsRouteImport } from './routes/app.keywords'
 import { Route as AppHumanizerRouteImport } from './routes/app.humanizer'
+import { Route as AppDocumentsRouteImport } from './routes/app.documents'
 import { Route as AppDetectorRouteImport } from './routes/app.detector'
 import { Route as AppDashboardRouteImport } from './routes/app.dashboard'
+import { Route as AppBlogGeneratorRouteImport } from './routes/app.blog-generator'
 import { Route as AppBillingRouteImport } from './routes/app.billing'
 import { Route as AppAnalyticsRouteImport } from './routes/app.analytics'
 import { Route as AppAiWriterRouteImport } from './routes/app.ai-writer'
@@ -77,6 +80,11 @@ const AppPlagiarismRoute = AppPlagiarismRouteImport.update({
   path: '/plagiarism',
   getParentRoute: () => AppRoute,
 } as any)
+const AppMediaRoute = AppMediaRouteImport.update({
+  id: '/media',
+  path: '/media',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppKeywordsRoute = AppKeywordsRouteImport.update({
   id: '/keywords',
   path: '/keywords',
@@ -87,6 +95,11 @@ const AppHumanizerRoute = AppHumanizerRouteImport.update({
   path: '/humanizer',
   getParentRoute: () => AppRoute,
 } as any)
+const AppDocumentsRoute = AppDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDetectorRoute = AppDetectorRouteImport.update({
   id: '/detector',
   path: '/detector',
@@ -95,6 +108,11 @@ const AppDetectorRoute = AppDetectorRouteImport.update({
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBlogGeneratorRoute = AppBlogGeneratorRouteImport.update({
+  id: '/blog-generator',
+  path: '/blog-generator',
   getParentRoute: () => AppRoute,
 } as any)
 const AppBillingRoute = AppBillingRouteImport.update({
@@ -123,10 +141,13 @@ export interface FileRoutesByFullPath {
   '/app/ai-writer': typeof AppAiWriterRoute
   '/app/analytics': typeof AppAnalyticsRoute
   '/app/billing': typeof AppBillingRoute
+  '/app/blog-generator': typeof AppBlogGeneratorRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/detector': typeof AppDetectorRoute
+  '/app/documents': typeof AppDocumentsRoute
   '/app/humanizer': typeof AppHumanizerRoute
   '/app/keywords': typeof AppKeywordsRoute
+  '/app/media': typeof AppMediaRoute
   '/app/plagiarism': typeof AppPlagiarismRoute
   '/app/projects': typeof AppProjectsRoute
   '/app/seo': typeof AppSeoRoute
@@ -141,10 +162,13 @@ export interface FileRoutesByTo {
   '/app/ai-writer': typeof AppAiWriterRoute
   '/app/analytics': typeof AppAnalyticsRoute
   '/app/billing': typeof AppBillingRoute
+  '/app/blog-generator': typeof AppBlogGeneratorRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/detector': typeof AppDetectorRoute
+  '/app/documents': typeof AppDocumentsRoute
   '/app/humanizer': typeof AppHumanizerRoute
   '/app/keywords': typeof AppKeywordsRoute
+  '/app/media': typeof AppMediaRoute
   '/app/plagiarism': typeof AppPlagiarismRoute
   '/app/projects': typeof AppProjectsRoute
   '/app/seo': typeof AppSeoRoute
@@ -161,10 +185,13 @@ export interface FileRoutesById {
   '/app/ai-writer': typeof AppAiWriterRoute
   '/app/analytics': typeof AppAnalyticsRoute
   '/app/billing': typeof AppBillingRoute
+  '/app/blog-generator': typeof AppBlogGeneratorRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/detector': typeof AppDetectorRoute
+  '/app/documents': typeof AppDocumentsRoute
   '/app/humanizer': typeof AppHumanizerRoute
   '/app/keywords': typeof AppKeywordsRoute
+  '/app/media': typeof AppMediaRoute
   '/app/plagiarism': typeof AppPlagiarismRoute
   '/app/projects': typeof AppProjectsRoute
   '/app/seo': typeof AppSeoRoute
@@ -182,10 +209,13 @@ export interface FileRouteTypes {
     | '/app/ai-writer'
     | '/app/analytics'
     | '/app/billing'
+    | '/app/blog-generator'
     | '/app/dashboard'
     | '/app/detector'
+    | '/app/documents'
     | '/app/humanizer'
     | '/app/keywords'
+    | '/app/media'
     | '/app/plagiarism'
     | '/app/projects'
     | '/app/seo'
@@ -200,10 +230,13 @@ export interface FileRouteTypes {
     | '/app/ai-writer'
     | '/app/analytics'
     | '/app/billing'
+    | '/app/blog-generator'
     | '/app/dashboard'
     | '/app/detector'
+    | '/app/documents'
     | '/app/humanizer'
     | '/app/keywords'
+    | '/app/media'
     | '/app/plagiarism'
     | '/app/projects'
     | '/app/seo'
@@ -219,10 +252,13 @@ export interface FileRouteTypes {
     | '/app/ai-writer'
     | '/app/analytics'
     | '/app/billing'
+    | '/app/blog-generator'
     | '/app/dashboard'
     | '/app/detector'
+    | '/app/documents'
     | '/app/humanizer'
     | '/app/keywords'
+    | '/app/media'
     | '/app/plagiarism'
     | '/app/projects'
     | '/app/seo'
@@ -310,6 +346,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPlagiarismRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/media': {
+      id: '/app/media'
+      path: '/media'
+      fullPath: '/app/media'
+      preLoaderRoute: typeof AppMediaRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/keywords': {
       id: '/app/keywords'
       path: '/keywords'
@@ -324,6 +367,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHumanizerRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/documents': {
+      id: '/app/documents'
+      path: '/documents'
+      fullPath: '/app/documents'
+      preLoaderRoute: typeof AppDocumentsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/detector': {
       id: '/app/detector'
       path: '/detector'
@@ -336,6 +386,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/app/dashboard'
       preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/blog-generator': {
+      id: '/app/blog-generator'
+      path: '/blog-generator'
+      fullPath: '/app/blog-generator'
+      preLoaderRoute: typeof AppBlogGeneratorRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/billing': {
@@ -366,10 +423,13 @@ interface AppRouteChildren {
   AppAiWriterRoute: typeof AppAiWriterRoute
   AppAnalyticsRoute: typeof AppAnalyticsRoute
   AppBillingRoute: typeof AppBillingRoute
+  AppBlogGeneratorRoute: typeof AppBlogGeneratorRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppDetectorRoute: typeof AppDetectorRoute
+  AppDocumentsRoute: typeof AppDocumentsRoute
   AppHumanizerRoute: typeof AppHumanizerRoute
   AppKeywordsRoute: typeof AppKeywordsRoute
+  AppMediaRoute: typeof AppMediaRoute
   AppPlagiarismRoute: typeof AppPlagiarismRoute
   AppProjectsRoute: typeof AppProjectsRoute
   AppSeoRoute: typeof AppSeoRoute
@@ -380,10 +440,13 @@ const AppRouteChildren: AppRouteChildren = {
   AppAiWriterRoute: AppAiWriterRoute,
   AppAnalyticsRoute: AppAnalyticsRoute,
   AppBillingRoute: AppBillingRoute,
+  AppBlogGeneratorRoute: AppBlogGeneratorRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppDetectorRoute: AppDetectorRoute,
+  AppDocumentsRoute: AppDocumentsRoute,
   AppHumanizerRoute: AppHumanizerRoute,
   AppKeywordsRoute: AppKeywordsRoute,
+  AppMediaRoute: AppMediaRoute,
   AppPlagiarismRoute: AppPlagiarismRoute,
   AppProjectsRoute: AppProjectsRoute,
   AppSeoRoute: AppSeoRoute,
@@ -403,13 +466,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
