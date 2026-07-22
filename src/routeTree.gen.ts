@@ -9,146 +9,27 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ToolsRouteImport } from './routes/tools'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as ToolsIndexRouteImport } from './routes/tools.index'
-import { Route as ToolsHumanizerRouteImport } from './routes/tools.humanizer'
-import { Route as ToolsDetectorRouteImport } from './routes/tools.detector'
 
-const ToolsRoute = ToolsRouteImport.update({
-  id: '/tools',
-  path: '/tools',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ToolsIndexRoute = ToolsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ToolsRoute,
-} as any)
-const ToolsHumanizerRoute = ToolsHumanizerRouteImport.update({
-  id: '/humanizer',
-  path: '/humanizer',
-  getParentRoute: () => ToolsRoute,
-} as any)
-const ToolsDetectorRoute = ToolsDetectorRouteImport.update({
-  id: '/detector',
-  path: '/detector',
-  getParentRoute: () => ToolsRoute,
-} as any)
-
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/tools': typeof ToolsRouteWithChildren
-  '/tools/detector': typeof ToolsDetectorRoute
-  '/tools/humanizer': typeof ToolsHumanizerRoute
-  '/tools/': typeof ToolsIndexRoute
-}
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/tools/detector': typeof ToolsDetectorRoute
-  '/tools/humanizer': typeof ToolsHumanizerRoute
-  '/tools': typeof ToolsIndexRoute
-}
+export interface FileRoutesByFullPath {}
+export interface FileRoutesByTo {}
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/tools': typeof ToolsRouteWithChildren
-  '/tools/detector': typeof ToolsDetectorRoute
-  '/tools/humanizer': typeof ToolsHumanizerRoute
-  '/tools/': typeof ToolsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/tools' | '/tools/detector' | '/tools/humanizer' | '/tools/'
+  fullPaths: never
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/tools/detector' | '/tools/humanizer' | '/tools'
-  id:
-    | '__root__'
-    | '/'
-    | '/tools'
-    | '/tools/detector'
-    | '/tools/humanizer'
-    | '/tools/'
+  to: never
+  id: '__root__'
   fileRoutesById: FileRoutesById
 }
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  ToolsRoute: typeof ToolsRouteWithChildren
-}
+export interface RootRouteChildren {}
 
 declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/tools': {
-      id: '/tools'
-      path: '/tools'
-      fullPath: '/tools'
-      preLoaderRoute: typeof ToolsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tools/': {
-      id: '/tools/'
-      path: '/'
-      fullPath: '/tools/'
-      preLoaderRoute: typeof ToolsIndexRouteImport
-      parentRoute: typeof ToolsRoute
-    }
-    '/tools/humanizer': {
-      id: '/tools/humanizer'
-      path: '/humanizer'
-      fullPath: '/tools/humanizer'
-      preLoaderRoute: typeof ToolsHumanizerRouteImport
-      parentRoute: typeof ToolsRoute
-    }
-    '/tools/detector': {
-      id: '/tools/detector'
-      path: '/detector'
-      fullPath: '/tools/detector'
-      preLoaderRoute: typeof ToolsDetectorRouteImport
-      parentRoute: typeof ToolsRoute
-    }
-  }
+  interface FileRoutesByPath {}
 }
 
-interface ToolsRouteChildren {
-  ToolsDetectorRoute: typeof ToolsDetectorRoute
-  ToolsHumanizerRoute: typeof ToolsHumanizerRoute
-  ToolsIndexRoute: typeof ToolsIndexRoute
-}
-
-const ToolsRouteChildren: ToolsRouteChildren = {
-  ToolsDetectorRoute: ToolsDetectorRoute,
-  ToolsHumanizerRoute: ToolsHumanizerRoute,
-  ToolsIndexRoute: ToolsIndexRoute,
-}
-
-const ToolsRouteWithChildren = ToolsRoute._addFileChildren(ToolsRouteChildren)
-
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  ToolsRoute: ToolsRouteWithChildren,
-}
+const rootRouteChildren: RootRouteChildren = {}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
