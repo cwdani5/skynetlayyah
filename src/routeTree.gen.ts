@@ -9,15 +9,40 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ToolsRouteImport } from './routes/tools'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ToolsIndexRouteImport } from './routes/tools.index'
-import { Route as ToolsHumanizerRouteImport } from './routes/tools.humanizer'
-import { Route as ToolsDetectorRouteImport } from './routes/tools.detector'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppHumanizerRouteImport } from './routes/app.humanizer'
+import { Route as AppDetectorRouteImport } from './routes/app.detector'
+import { Route as AppDashboardRouteImport } from './routes/app.dashboard'
 
-const ToolsRoute = ToolsRouteImport.update({
-  id: '/tools',
-  path: '/tools',
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -25,69 +50,145 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ToolsIndexRoute = ToolsIndexRouteImport.update({
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => ToolsRoute,
+  getParentRoute: () => AppRoute,
 } as any)
-const ToolsHumanizerRoute = ToolsHumanizerRouteImport.update({
+const AppHumanizerRoute = AppHumanizerRouteImport.update({
   id: '/humanizer',
   path: '/humanizer',
-  getParentRoute: () => ToolsRoute,
+  getParentRoute: () => AppRoute,
 } as any)
-const ToolsDetectorRoute = ToolsDetectorRouteImport.update({
+const AppDetectorRoute = AppDetectorRouteImport.update({
   id: '/detector',
   path: '/detector',
-  getParentRoute: () => ToolsRoute,
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/tools': typeof ToolsRouteWithChildren
-  '/tools/detector': typeof ToolsDetectorRoute
-  '/tools/humanizer': typeof ToolsHumanizerRoute
-  '/tools/': typeof ToolsIndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/detector': typeof AppDetectorRoute
+  '/app/humanizer': typeof AppHumanizerRoute
+  '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/tools/detector': typeof ToolsDetectorRoute
-  '/tools/humanizer': typeof ToolsHumanizerRoute
-  '/tools': typeof ToolsIndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/detector': typeof AppDetectorRoute
+  '/app/humanizer': typeof AppHumanizerRoute
+  '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/tools': typeof ToolsRouteWithChildren
-  '/tools/detector': typeof ToolsDetectorRoute
-  '/tools/humanizer': typeof ToolsHumanizerRoute
-  '/tools/': typeof ToolsIndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/detector': typeof AppDetectorRoute
+  '/app/humanizer': typeof AppHumanizerRoute
+  '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/tools' | '/tools/detector' | '/tools/humanizer' | '/tools/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
+    | '/verify-email'
+    | '/app/dashboard'
+    | '/app/detector'
+    | '/app/humanizer'
+    | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/tools/detector' | '/tools/humanizer' | '/tools'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
+    | '/verify-email'
+    | '/app/dashboard'
+    | '/app/detector'
+    | '/app/humanizer'
+    | '/app'
   id:
     | '__root__'
     | '/'
-    | '/tools'
-    | '/tools/detector'
-    | '/tools/humanizer'
-    | '/tools/'
+    | '/app'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
+    | '/verify-email'
+    | '/app/dashboard'
+    | '/app/detector'
+    | '/app/humanizer'
+    | '/app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ToolsRoute: typeof ToolsRouteWithChildren
+  AppRoute: typeof AppRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  LoginRoute: typeof LoginRoute
+  SignupRoute: typeof SignupRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/tools': {
-      id: '/tools'
-      path: '/tools'
-      fullPath: '/tools'
-      preLoaderRoute: typeof ToolsRouteImport
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -97,47 +198,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tools/': {
-      id: '/tools/'
+    '/app/': {
+      id: '/app/'
       path: '/'
-      fullPath: '/tools/'
-      preLoaderRoute: typeof ToolsIndexRouteImport
-      parentRoute: typeof ToolsRoute
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/tools/humanizer': {
-      id: '/tools/humanizer'
+    '/app/humanizer': {
+      id: '/app/humanizer'
       path: '/humanizer'
-      fullPath: '/tools/humanizer'
-      preLoaderRoute: typeof ToolsHumanizerRouteImport
-      parentRoute: typeof ToolsRoute
+      fullPath: '/app/humanizer'
+      preLoaderRoute: typeof AppHumanizerRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/tools/detector': {
-      id: '/tools/detector'
+    '/app/detector': {
+      id: '/app/detector'
       path: '/detector'
-      fullPath: '/tools/detector'
-      preLoaderRoute: typeof ToolsDetectorRouteImport
-      parentRoute: typeof ToolsRoute
+      fullPath: '/app/detector'
+      preLoaderRoute: typeof AppDetectorRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/dashboard': {
+      id: '/app/dashboard'
+      path: '/dashboard'
+      fullPath: '/app/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
     }
   }
 }
 
-interface ToolsRouteChildren {
-  ToolsDetectorRoute: typeof ToolsDetectorRoute
-  ToolsHumanizerRoute: typeof ToolsHumanizerRoute
-  ToolsIndexRoute: typeof ToolsIndexRoute
+interface AppRouteChildren {
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppDetectorRoute: typeof AppDetectorRoute
+  AppHumanizerRoute: typeof AppHumanizerRoute
+  AppIndexRoute: typeof AppIndexRoute
 }
 
-const ToolsRouteChildren: ToolsRouteChildren = {
-  ToolsDetectorRoute: ToolsDetectorRoute,
-  ToolsHumanizerRoute: ToolsHumanizerRoute,
-  ToolsIndexRoute: ToolsIndexRoute,
+const AppRouteChildren: AppRouteChildren = {
+  AppDashboardRoute: AppDashboardRoute,
+  AppDetectorRoute: AppDetectorRoute,
+  AppHumanizerRoute: AppHumanizerRoute,
+  AppIndexRoute: AppIndexRoute,
 }
 
-const ToolsRouteWithChildren = ToolsRoute._addFileChildren(ToolsRouteChildren)
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ToolsRoute: ToolsRouteWithChildren,
+  AppRoute: AppRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
+  VerifyEmailRoute: VerifyEmailRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
