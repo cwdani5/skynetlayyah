@@ -16,9 +16,35 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppTemplatesRouteImport } from './routes/app.templates'
+import { Route as AppTeamRouteImport } from './routes/app.team'
+import { Route as AppSocialRouteImport } from './routes/app.social'
+import { Route as AppSettingsRouteImport } from './routes/app.settings'
+import { Route as AppSeoRouteImport } from './routes/app.seo'
+import { Route as AppSchemaRouteImport } from './routes/app.schema'
+import { Route as AppProjectsRouteImport } from './routes/app.projects'
+import { Route as AppProductRouteImport } from './routes/app.product'
+import { Route as AppPlagiarismRouteImport } from './routes/app.plagiarism'
+import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
+import { Route as AppMetaRouteImport } from './routes/app.meta'
+import { Route as AppMediaRouteImport } from './routes/app.media'
+import { Route as AppLibraryRouteImport } from './routes/app.library'
+import { Route as AppLandingRouteImport } from './routes/app.landing'
+import { Route as AppKeywordsRouteImport } from './routes/app.keywords'
 import { Route as AppHumanizerRouteImport } from './routes/app.humanizer'
+import { Route as AppHelpRouteImport } from './routes/app.help'
+import { Route as AppFaqRouteImport } from './routes/app.faq'
+import { Route as AppEmailRouteImport } from './routes/app.email'
+import { Route as AppDocumentsRouteImport } from './routes/app.documents'
 import { Route as AppDetectorRouteImport } from './routes/app.detector'
 import { Route as AppDashboardRouteImport } from './routes/app.dashboard'
+import { Route as AppBriefRouteImport } from './routes/app.brief'
+import { Route as AppBlogGeneratorRouteImport } from './routes/app.blog-generator'
+import { Route as AppBillingRouteImport } from './routes/app.billing'
+import { Route as AppAnalyticsRouteImport } from './routes/app.analytics'
+import { Route as AppAiWriterRouteImport } from './routes/app.ai-writer'
+import { Route as AppAdsRouteImport } from './routes/app.ads'
+import { Route as AppAdminRouteImport } from './routes/app.admin'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -55,9 +81,104 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppTemplatesRoute = AppTemplatesRouteImport.update({
+  id: '/templates',
+  path: '/templates',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTeamRoute = AppTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSocialRoute = AppSocialRouteImport.update({
+  id: '/social',
+  path: '/social',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSeoRoute = AppSeoRouteImport.update({
+  id: '/seo',
+  path: '/seo',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSchemaRoute = AppSchemaRouteImport.update({
+  id: '/schema',
+  path: '/schema',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProjectsRoute = AppProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProductRoute = AppProductRouteImport.update({
+  id: '/product',
+  path: '/product',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPlagiarismRoute = AppPlagiarismRouteImport.update({
+  id: '/plagiarism',
+  path: '/plagiarism',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotificationsRoute = AppNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMetaRoute = AppMetaRouteImport.update({
+  id: '/meta',
+  path: '/meta',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMediaRoute = AppMediaRouteImport.update({
+  id: '/media',
+  path: '/media',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLibraryRoute = AppLibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLandingRoute = AppLandingRouteImport.update({
+  id: '/landing',
+  path: '/landing',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppKeywordsRoute = AppKeywordsRouteImport.update({
+  id: '/keywords',
+  path: '/keywords',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppHumanizerRoute = AppHumanizerRouteImport.update({
   id: '/humanizer',
   path: '/humanizer',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHelpRoute = AppHelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFaqRoute = AppFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEmailRoute = AppEmailRouteImport.update({
+  id: '/email',
+  path: '/email',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDocumentsRoute = AppDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
   getParentRoute: () => AppRoute,
 } as any)
 const AppDetectorRoute = AppDetectorRouteImport.update({
@@ -70,6 +191,41 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
+const AppBriefRoute = AppBriefRouteImport.update({
+  id: '/brief',
+  path: '/brief',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBlogGeneratorRoute = AppBlogGeneratorRouteImport.update({
+  id: '/blog-generator',
+  path: '/blog-generator',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBillingRoute = AppBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAiWriterRoute = AppAiWriterRouteImport.update({
+  id: '/ai-writer',
+  path: '/ai-writer',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdsRoute = AppAdsRouteImport.update({
+  id: '/ads',
+  path: '/ads',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminRoute = AppAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -78,9 +234,35 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/app/admin': typeof AppAdminRoute
+  '/app/ads': typeof AppAdsRoute
+  '/app/ai-writer': typeof AppAiWriterRoute
+  '/app/analytics': typeof AppAnalyticsRoute
+  '/app/billing': typeof AppBillingRoute
+  '/app/blog-generator': typeof AppBlogGeneratorRoute
+  '/app/brief': typeof AppBriefRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/detector': typeof AppDetectorRoute
+  '/app/documents': typeof AppDocumentsRoute
+  '/app/email': typeof AppEmailRoute
+  '/app/faq': typeof AppFaqRoute
+  '/app/help': typeof AppHelpRoute
   '/app/humanizer': typeof AppHumanizerRoute
+  '/app/keywords': typeof AppKeywordsRoute
+  '/app/landing': typeof AppLandingRoute
+  '/app/library': typeof AppLibraryRoute
+  '/app/media': typeof AppMediaRoute
+  '/app/meta': typeof AppMetaRoute
+  '/app/notifications': typeof AppNotificationsRoute
+  '/app/plagiarism': typeof AppPlagiarismRoute
+  '/app/product': typeof AppProductRoute
+  '/app/projects': typeof AppProjectsRoute
+  '/app/schema': typeof AppSchemaRoute
+  '/app/seo': typeof AppSeoRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/social': typeof AppSocialRoute
+  '/app/team': typeof AppTeamRoute
+  '/app/templates': typeof AppTemplatesRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
@@ -89,9 +271,35 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/app/admin': typeof AppAdminRoute
+  '/app/ads': typeof AppAdsRoute
+  '/app/ai-writer': typeof AppAiWriterRoute
+  '/app/analytics': typeof AppAnalyticsRoute
+  '/app/billing': typeof AppBillingRoute
+  '/app/blog-generator': typeof AppBlogGeneratorRoute
+  '/app/brief': typeof AppBriefRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/detector': typeof AppDetectorRoute
+  '/app/documents': typeof AppDocumentsRoute
+  '/app/email': typeof AppEmailRoute
+  '/app/faq': typeof AppFaqRoute
+  '/app/help': typeof AppHelpRoute
   '/app/humanizer': typeof AppHumanizerRoute
+  '/app/keywords': typeof AppKeywordsRoute
+  '/app/landing': typeof AppLandingRoute
+  '/app/library': typeof AppLibraryRoute
+  '/app/media': typeof AppMediaRoute
+  '/app/meta': typeof AppMetaRoute
+  '/app/notifications': typeof AppNotificationsRoute
+  '/app/plagiarism': typeof AppPlagiarismRoute
+  '/app/product': typeof AppProductRoute
+  '/app/projects': typeof AppProjectsRoute
+  '/app/schema': typeof AppSchemaRoute
+  '/app/seo': typeof AppSeoRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/social': typeof AppSocialRoute
+  '/app/team': typeof AppTeamRoute
+  '/app/templates': typeof AppTemplatesRoute
   '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
@@ -102,9 +310,35 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/app/admin': typeof AppAdminRoute
+  '/app/ads': typeof AppAdsRoute
+  '/app/ai-writer': typeof AppAiWriterRoute
+  '/app/analytics': typeof AppAnalyticsRoute
+  '/app/billing': typeof AppBillingRoute
+  '/app/blog-generator': typeof AppBlogGeneratorRoute
+  '/app/brief': typeof AppBriefRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/detector': typeof AppDetectorRoute
+  '/app/documents': typeof AppDocumentsRoute
+  '/app/email': typeof AppEmailRoute
+  '/app/faq': typeof AppFaqRoute
+  '/app/help': typeof AppHelpRoute
   '/app/humanizer': typeof AppHumanizerRoute
+  '/app/keywords': typeof AppKeywordsRoute
+  '/app/landing': typeof AppLandingRoute
+  '/app/library': typeof AppLibraryRoute
+  '/app/media': typeof AppMediaRoute
+  '/app/meta': typeof AppMetaRoute
+  '/app/notifications': typeof AppNotificationsRoute
+  '/app/plagiarism': typeof AppPlagiarismRoute
+  '/app/product': typeof AppProductRoute
+  '/app/projects': typeof AppProjectsRoute
+  '/app/schema': typeof AppSchemaRoute
+  '/app/seo': typeof AppSeoRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/social': typeof AppSocialRoute
+  '/app/team': typeof AppTeamRoute
+  '/app/templates': typeof AppTemplatesRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
@@ -116,9 +350,35 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/verify-email'
+    | '/app/admin'
+    | '/app/ads'
+    | '/app/ai-writer'
+    | '/app/analytics'
+    | '/app/billing'
+    | '/app/blog-generator'
+    | '/app/brief'
     | '/app/dashboard'
     | '/app/detector'
+    | '/app/documents'
+    | '/app/email'
+    | '/app/faq'
+    | '/app/help'
     | '/app/humanizer'
+    | '/app/keywords'
+    | '/app/landing'
+    | '/app/library'
+    | '/app/media'
+    | '/app/meta'
+    | '/app/notifications'
+    | '/app/plagiarism'
+    | '/app/product'
+    | '/app/projects'
+    | '/app/schema'
+    | '/app/seo'
+    | '/app/settings'
+    | '/app/social'
+    | '/app/team'
+    | '/app/templates'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -127,9 +387,35 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/verify-email'
+    | '/app/admin'
+    | '/app/ads'
+    | '/app/ai-writer'
+    | '/app/analytics'
+    | '/app/billing'
+    | '/app/blog-generator'
+    | '/app/brief'
     | '/app/dashboard'
     | '/app/detector'
+    | '/app/documents'
+    | '/app/email'
+    | '/app/faq'
+    | '/app/help'
     | '/app/humanizer'
+    | '/app/keywords'
+    | '/app/landing'
+    | '/app/library'
+    | '/app/media'
+    | '/app/meta'
+    | '/app/notifications'
+    | '/app/plagiarism'
+    | '/app/product'
+    | '/app/projects'
+    | '/app/schema'
+    | '/app/seo'
+    | '/app/settings'
+    | '/app/social'
+    | '/app/team'
+    | '/app/templates'
     | '/app'
   id:
     | '__root__'
@@ -139,9 +425,35 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/verify-email'
+    | '/app/admin'
+    | '/app/ads'
+    | '/app/ai-writer'
+    | '/app/analytics'
+    | '/app/billing'
+    | '/app/blog-generator'
+    | '/app/brief'
     | '/app/dashboard'
     | '/app/detector'
+    | '/app/documents'
+    | '/app/email'
+    | '/app/faq'
+    | '/app/help'
     | '/app/humanizer'
+    | '/app/keywords'
+    | '/app/landing'
+    | '/app/library'
+    | '/app/media'
+    | '/app/meta'
+    | '/app/notifications'
+    | '/app/plagiarism'
+    | '/app/product'
+    | '/app/projects'
+    | '/app/schema'
+    | '/app/seo'
+    | '/app/settings'
+    | '/app/social'
+    | '/app/team'
+    | '/app/templates'
     | '/app/'
   fileRoutesById: FileRoutesById
 }
@@ -205,11 +517,144 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/templates': {
+      id: '/app/templates'
+      path: '/templates'
+      fullPath: '/app/templates'
+      preLoaderRoute: typeof AppTemplatesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/team': {
+      id: '/app/team'
+      path: '/team'
+      fullPath: '/app/team'
+      preLoaderRoute: typeof AppTeamRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/social': {
+      id: '/app/social'
+      path: '/social'
+      fullPath: '/app/social'
+      preLoaderRoute: typeof AppSocialRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/seo': {
+      id: '/app/seo'
+      path: '/seo'
+      fullPath: '/app/seo'
+      preLoaderRoute: typeof AppSeoRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/schema': {
+      id: '/app/schema'
+      path: '/schema'
+      fullPath: '/app/schema'
+      preLoaderRoute: typeof AppSchemaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/projects': {
+      id: '/app/projects'
+      path: '/projects'
+      fullPath: '/app/projects'
+      preLoaderRoute: typeof AppProjectsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/product': {
+      id: '/app/product'
+      path: '/product'
+      fullPath: '/app/product'
+      preLoaderRoute: typeof AppProductRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/plagiarism': {
+      id: '/app/plagiarism'
+      path: '/plagiarism'
+      fullPath: '/app/plagiarism'
+      preLoaderRoute: typeof AppPlagiarismRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/notifications': {
+      id: '/app/notifications'
+      path: '/notifications'
+      fullPath: '/app/notifications'
+      preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/meta': {
+      id: '/app/meta'
+      path: '/meta'
+      fullPath: '/app/meta'
+      preLoaderRoute: typeof AppMetaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/media': {
+      id: '/app/media'
+      path: '/media'
+      fullPath: '/app/media'
+      preLoaderRoute: typeof AppMediaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/library': {
+      id: '/app/library'
+      path: '/library'
+      fullPath: '/app/library'
+      preLoaderRoute: typeof AppLibraryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/landing': {
+      id: '/app/landing'
+      path: '/landing'
+      fullPath: '/app/landing'
+      preLoaderRoute: typeof AppLandingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/keywords': {
+      id: '/app/keywords'
+      path: '/keywords'
+      fullPath: '/app/keywords'
+      preLoaderRoute: typeof AppKeywordsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/humanizer': {
       id: '/app/humanizer'
       path: '/humanizer'
       fullPath: '/app/humanizer'
       preLoaderRoute: typeof AppHumanizerRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/help': {
+      id: '/app/help'
+      path: '/help'
+      fullPath: '/app/help'
+      preLoaderRoute: typeof AppHelpRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/faq': {
+      id: '/app/faq'
+      path: '/faq'
+      fullPath: '/app/faq'
+      preLoaderRoute: typeof AppFaqRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/email': {
+      id: '/app/email'
+      path: '/email'
+      fullPath: '/app/email'
+      preLoaderRoute: typeof AppEmailRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/documents': {
+      id: '/app/documents'
+      path: '/documents'
+      fullPath: '/app/documents'
+      preLoaderRoute: typeof AppDocumentsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/detector': {
@@ -226,20 +671,121 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/brief': {
+      id: '/app/brief'
+      path: '/brief'
+      fullPath: '/app/brief'
+      preLoaderRoute: typeof AppBriefRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/blog-generator': {
+      id: '/app/blog-generator'
+      path: '/blog-generator'
+      fullPath: '/app/blog-generator'
+      preLoaderRoute: typeof AppBlogGeneratorRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/billing': {
+      id: '/app/billing'
+      path: '/billing'
+      fullPath: '/app/billing'
+      preLoaderRoute: typeof AppBillingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/analytics': {
+      id: '/app/analytics'
+      path: '/analytics'
+      fullPath: '/app/analytics'
+      preLoaderRoute: typeof AppAnalyticsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/ai-writer': {
+      id: '/app/ai-writer'
+      path: '/ai-writer'
+      fullPath: '/app/ai-writer'
+      preLoaderRoute: typeof AppAiWriterRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/ads': {
+      id: '/app/ads'
+      path: '/ads'
+      fullPath: '/app/ads'
+      preLoaderRoute: typeof AppAdsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/admin': {
+      id: '/app/admin'
+      path: '/admin'
+      fullPath: '/app/admin'
+      preLoaderRoute: typeof AppAdminRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppAdminRoute: typeof AppAdminRoute
+  AppAdsRoute: typeof AppAdsRoute
+  AppAiWriterRoute: typeof AppAiWriterRoute
+  AppAnalyticsRoute: typeof AppAnalyticsRoute
+  AppBillingRoute: typeof AppBillingRoute
+  AppBlogGeneratorRoute: typeof AppBlogGeneratorRoute
+  AppBriefRoute: typeof AppBriefRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppDetectorRoute: typeof AppDetectorRoute
+  AppDocumentsRoute: typeof AppDocumentsRoute
+  AppEmailRoute: typeof AppEmailRoute
+  AppFaqRoute: typeof AppFaqRoute
+  AppHelpRoute: typeof AppHelpRoute
   AppHumanizerRoute: typeof AppHumanizerRoute
+  AppKeywordsRoute: typeof AppKeywordsRoute
+  AppLandingRoute: typeof AppLandingRoute
+  AppLibraryRoute: typeof AppLibraryRoute
+  AppMediaRoute: typeof AppMediaRoute
+  AppMetaRoute: typeof AppMetaRoute
+  AppNotificationsRoute: typeof AppNotificationsRoute
+  AppPlagiarismRoute: typeof AppPlagiarismRoute
+  AppProductRoute: typeof AppProductRoute
+  AppProjectsRoute: typeof AppProjectsRoute
+  AppSchemaRoute: typeof AppSchemaRoute
+  AppSeoRoute: typeof AppSeoRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppSocialRoute: typeof AppSocialRoute
+  AppTeamRoute: typeof AppTeamRoute
+  AppTemplatesRoute: typeof AppTemplatesRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAdminRoute: AppAdminRoute,
+  AppAdsRoute: AppAdsRoute,
+  AppAiWriterRoute: AppAiWriterRoute,
+  AppAnalyticsRoute: AppAnalyticsRoute,
+  AppBillingRoute: AppBillingRoute,
+  AppBlogGeneratorRoute: AppBlogGeneratorRoute,
+  AppBriefRoute: AppBriefRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppDetectorRoute: AppDetectorRoute,
+  AppDocumentsRoute: AppDocumentsRoute,
+  AppEmailRoute: AppEmailRoute,
+  AppFaqRoute: AppFaqRoute,
+  AppHelpRoute: AppHelpRoute,
   AppHumanizerRoute: AppHumanizerRoute,
+  AppKeywordsRoute: AppKeywordsRoute,
+  AppLandingRoute: AppLandingRoute,
+  AppLibraryRoute: AppLibraryRoute,
+  AppMediaRoute: AppMediaRoute,
+  AppMetaRoute: AppMetaRoute,
+  AppNotificationsRoute: AppNotificationsRoute,
+  AppPlagiarismRoute: AppPlagiarismRoute,
+  AppProductRoute: AppProductRoute,
+  AppProjectsRoute: AppProjectsRoute,
+  AppSchemaRoute: AppSchemaRoute,
+  AppSeoRoute: AppSeoRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppSocialRoute: AppSocialRoute,
+  AppTeamRoute: AppTeamRoute,
+  AppTemplatesRoute: AppTemplatesRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
