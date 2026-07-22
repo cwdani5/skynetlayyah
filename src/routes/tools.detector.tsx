@@ -43,94 +43,190 @@ function DetectorPage() {
       setResult(res);
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Something went wrong";
-      setError(msg.includes("402") ? "AI credits khatam ho gaye." : msg.includes("429") ? "Rate limit. Thodi der baad try karein." : msg);
+      setError(
+        msg.includes("402")
+          ? "AI credits khatam ho gaye."
+          : msg.includes("429")
+          ? "Rate limit. Thodi der baad try karein."
+          : msg
+      );
     } finally {
       setLoading(false);
     }
   }
 
   const score = result?.aiScore ?? 0;
-  const barColor =
-    score >= 70 ? "bg-red-500" : score >= 40 ? "bg-amber-500" : "bg-emerald-500";
+  const circumference = 2 * Math.PI * 88;
+  const dashOffset = circumference - (circumference * score) / 100;
 
   return (
-    <div>
-      <h1 className="font-[family-name:var(--font-serif)] text-4xl md:text-5xl leading-tight tracking-tight">
-        AI Detector
-      </h1>
-      <p className="mt-3 text-muted-foreground">
-        Check karein ki text human ne likha hai ya AI ne generate kiya hai.
-      </p>
+    <div className="grid lg:grid-cols-2 gap-px bg-[var(--midnight-700)] border border-[var(--midnight-700)] rounded-2xl overflow-hidden shadow-2xl shadow-black">
+      {/* Input Panel */}
+      <div className="bg-[var(--midnight-900)] p-6 md:p-8 flex flex-col gap-6">
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-bold uppercase tracking-widest text-slate-500 font-[family-name:var(--font-mono)]">
+            Source Content
+          </label>
+          <span className="text-xs text-slate-500 tabular-nums">
+            {input.length} / 8000 chars
+          </span>
+        </div>
 
-      <div className="mt-8 space-y-3">
-        <label className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          Text to analyze
-        </label>
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          rows={8}
-          placeholder="Paste text to check..."
-          className="w-full resize-y rounded-md border border-border bg-background p-4 text-sm outline-none focus:border-foreground/40 transition"
+          maxLength={8000}
+          className="flex-1 w-full min-h-[380px] bg-[var(--midnight-950)] border border-[var(--midnight-700)] rounded-xl p-6 text-slate-200 focus:outline-none focus:ring-2 focus:ring-[var(--indigo-500)] transition-all resize-none leading-relaxed placeholder:text-slate-700"
+          placeholder="Paste your text here to analyze for AI patterns..."
         />
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-muted-foreground">
-            {input.length} / 8000
+
+        <button
+          onClick={onSubmit}
+          disabled={loading || !input.trim()}
+          className="w-full py-4 bg-[var(--indigo-500)] hover:bg-indigo-500 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 group shadow-lg shadow-indigo-900/40 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span className="font-[family-name:var(--font-mono)]">
+            {loading ? "ANALYZING..." : "ANALYZE CONTENT"}
           </span>
-          <button
-            onClick={onSubmit}
-            disabled={loading || !input.trim()}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
-          >
-            {loading ? "Analyzing..." : "Detect"}
-          </button>
-        </div>
+          {!loading && (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 transition-transform group-hover:translate-x-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
+            </svg>
+          )}
+        </button>
       </div>
 
-      {error && (
-        <p className="mt-6 rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
-          {error}
-        </p>
-      )}
-
-      {result && (
-        <div className="mt-8 rounded-md border border-border p-6">
-          <div className="flex items-baseline justify-between">
-            <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                Verdict
-              </div>
-              <div className="mt-1 font-[family-name:var(--font-serif)] text-3xl">
-                {result.verdict}
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                AI Score
-              </div>
-              <div className="mt-1 font-[family-name:var(--font-serif)] text-3xl tabular-nums">
-                {result.aiScore}%
-              </div>
-            </div>
-          </div>
-          <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-muted">
-            <div
-              className={`h-full ${barColor} transition-all`}
-              style={{ width: `${Math.min(100, Math.max(0, score))}%` }}
-            />
-          </div>
-          {result.reasons?.length > 0 && (
-            <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
-              {result.reasons.map((r, i) => (
-                <li key={i} className="flex gap-2">
-                  <span className="text-foreground">·</span>
-                  <span>{r}</span>
-                </li>
-              ))}
-            </ul>
-          )}
+      {/* Output Panel */}
+      <div className="bg-[var(--midnight-950)] p-6 md:p-8 flex flex-col gap-6">
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-bold uppercase tracking-widest text-slate-500 font-[family-name:var(--font-mono)]">
+            Analysis Verdict
+          </label>
+          <span className="flex items-center gap-2 text-xs text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded border border-emerald-400/20">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
+            {loading ? "Processing" : result ? "Complete" : "System Ready"}
+          </span>
         </div>
-      )}
+
+        {error && (
+          <div className="p-4 rounded-xl border border-red-500/30 bg-red-500/10 text-sm text-red-300">
+            {error}
+          </div>
+        )}
+
+        {result ? (
+          <>
+            {/* Score Circle */}
+            <div className="flex flex-col items-center justify-center py-6 bg-[var(--midnight-900)]/40 rounded-2xl border border-[var(--midnight-700)] relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--indigo-500)] to-transparent"></div>
+
+              <div className="relative flex items-center justify-center">
+                <svg className="w-48 h-48 -rotate-90">
+                  <circle
+                    cx="96"
+                    cy="96"
+                    r="88"
+                    stroke="var(--midnight-700)"
+                    strokeWidth="8"
+                    fill="transparent"
+                  />
+                  <circle
+                    cx="96"
+                    cy="96"
+                    r="88"
+                    stroke="var(--indigo-500)"
+                    strokeWidth="8"
+                    fill="transparent"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={dashOffset}
+                    strokeLinecap="round"
+                    className="drop-shadow-[0_0_8px_rgba(79,70,229,0.5)] transition-all duration-700"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-5xl font-bold text-white leading-none font-[family-name:var(--font-mono)] tabular-nums">
+                    {result.aiScore}%
+                  </span>
+                  <span className="text-[10px] uppercase tracking-tighter text-slate-400 mt-1">
+                    AI Probability
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-6 text-center px-4">
+                <h3 className="text-xl font-semibold text-white">
+                  {result.verdict}
+                </h3>
+              </div>
+            </div>
+
+            {/* Reasons Grid */}
+            {result.reasons?.length > 0 && (
+              <div className="grid gap-3">
+                {result.reasons.map((reason, i) => (
+                  <div
+                    key={i}
+                    className="p-4 bg-[var(--midnight-900)] rounded-xl border border-[var(--midnight-700)] flex items-start gap-3"
+                  >
+                    <div className="w-8 h-8 shrink-0 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                      <svg
+                        className="w-4 h-4 text-[var(--indigo-500)]"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </div>
+                    <p className="text-sm text-slate-300 leading-relaxed">
+                      {reason}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="flex-1 min-h-[380px] rounded-xl border border-dashed border-[var(--midnight-700)] flex items-center justify-center text-center p-8">
+            <div className="max-w-xs space-y-4">
+              <div className="w-14 h-14 rounded-full bg-[var(--midnight-900)] border border-[var(--midnight-700)] flex items-center justify-center mx-auto">
+                <svg
+                  className="w-6 h-6 text-[var(--indigo-500)]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <p className="text-slate-500 text-sm">
+                Analysis verdict, probability score, and key findings will appear here.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
