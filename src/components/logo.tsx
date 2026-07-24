@@ -1,19 +1,22 @@
 import { cn } from "@/lib/utils";
 
-export function Logo({ className, mark = false }: { className?: string; mark?: boolean }) {
+export function Logo({ className, size = 40 }: { className?: string; size?: number }) {
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <div className="relative h-8 w-8 shrink-0 rounded-lg bg-gradient-to-br from-primary via-primary to-primary/60 shadow-lg shadow-primary/30">
-        <div className="absolute inset-[3px] rounded-md bg-background/20 backdrop-blur-sm flex items-center justify-center">
-          <div className="h-2 w-2 rounded-sm bg-primary-foreground" />
-        </div>
+    <div className={cn("flex items-center gap-2.5", className)}>
+      <div
+        className="relative grid place-items-center rounded-xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-md shadow-primary/20 ring-1 ring-primary/30"
+        style={{ width: size, height: size }}
+      >
+        <svg viewBox="0 0 24 24" width={size * 0.6} height={size * 0.6} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 17 L10 11 L14 15 L20 7" />
+          <circle cx="20" cy="7" r="1.6" fill="currentColor" />
+          <path d="M4 20h16" opacity="0.5" />
+        </svg>
       </div>
-      {!mark && (
-        <div className="flex flex-col leading-none">
-          <span className="text-sm font-semibold tracking-tight">SEO Studio</span>
-          <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">AI Content</span>
-        </div>
-      )}
+      <div className="leading-tight">
+        <div className="font-display text-lg font-extrabold tracking-tight">SKYNET</div>
+        <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Layyah</div>
+      </div>
     </div>
   );
 }
