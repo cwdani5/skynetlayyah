@@ -134,8 +134,9 @@ Return JSON of the shape:
     }
     const json = (await resp.json()) as { choices?: { message?: { content?: string } }[] };
     const content = json.choices?.[0]?.message?.content ?? "{}";
-    let parsed: { items?: unknown[] } = {};
-    try { parsed = JSON.parse(content); } catch { parsed = { items: [] }; }
-    const items = Array.isArray(parsed.items) ? parsed.items : [];
+    type Item = { title?: string; organization?: string; location?: string; description?: string; deadline?: string | null; apply_url?: string | null };
+    let parsed: { items?: Item[] } = {};
+    try { parsed = JSON.parse(content) as { items?: Item[] }; } catch { parsed = { items: [] }; }
+    const items: Item[] = Array.isArray(parsed.items) ? parsed.items : [];
     return { url: data.url, type: data.type, items };
   });
