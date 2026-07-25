@@ -220,9 +220,15 @@ function AdminPage() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <Button onClick={runFetch} disabled={!fetchUrl || fetchLoading} className="gap-2">
-                    {fetchLoading ? <><RefreshCw className="h-4 w-4 animate-spin" /> Fetching…</> : <>Extract</>}
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button onClick={runFetch} disabled={!fetchUrl || fetchLoading} className="gap-2">
+                      {fetchLoading ? <><RefreshCw className="h-4 w-4 animate-spin" /> Fetching…</> : <>Extract all posts</>}
+                    </Button>
+                    {fetchResults.length > 0 && (
+                      <Button variant="secondary" onClick={importAll} className="gap-2">Import all ({fetchResults.length})</Button>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Tip: PPSC/FPSC ad ka PDF ya webpage URL do — andar ki har post alag entry ban kar aayegi.</p>
                   <div className="max-h-80 overflow-auto space-y-2">
                     {fetchResults.map((it, i) => (
                       <div key={i} className="rounded-lg border p-3 text-sm">
