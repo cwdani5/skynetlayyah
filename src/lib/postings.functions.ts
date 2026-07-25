@@ -103,21 +103,35 @@ export const extractFromUrl = createServerFn({ method: "POST" })
     const apiKey = process.env.LOVABLE_API_KEY;
     if (!apiKey) throw new Error("AI service not configured");
 
-    // Fetch source page (best effort)
     let pageText = "";
+    let isPdf = false;
     try {
       const res = await fetch(data.url, { headers: { "User-Agent": "Mozilla/5.0 SkynetBot" } });
-      const html = await res.text();
-      pageText = html.replace(/<script[\s\S]*?<\/script>/gi, "").replace(/<style[\s\S]*?<\/style>/gi, "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 8000);
+      const ct = res.headers.get("content-type") ?? "";
+      if (ct.includes("pdf") || data.url.toLowerCase().endsWith(".pdf")) {
+        isPdf = true;
+        const buf = new Uint8Array(await res.arrayBuffer());
+        const txt = new TextDecoder("latin1").decode(buf);
+        pageText = txt.replace(/[^\x20-\x7E\n]+/g, " ").replace(/\s+/g, " ").slice(0, 24000);
+      } else {
+        const html = await res.text();
+        pageText = html.replace(/<script[\s\S]*?<\/script>/gi, "").replace(/<style[\s\S]*?<\/style>/gi, "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 24000);
+      }
     } catch { /* ignore */ }
 
-    const prompt = `You extract structured postings from Pakistani government / education webpages. Given the following page content from ${data.url}, extract up to 5 ${data.type} postings. Return STRICT JSON only, no prose.
+    const prompt = `You are extracting an EXHAUSTIVE list of individual ${data.type} postings from a Pakistani government / education advertisement${isPdf ? " (PDF)" : " webpage"} at ${data.url}.
 
-Page content:
-"""${pageText}"""
+RULES:
+- A single advertisement usually contains MANY separate posts (e.g. "Assistant Engineer", "Sub-Engineer", "Stenographer", "Clerk"). Return EACH post as its OWN item — do NOT merge.
+- Extract up to 50 items. Do not skip any listed post.
+- Per item capture: exact post title, department/organization, location, short description (<=300 chars) with BPS/scale, vacancies, qualification, age if present.
+- deadline as YYYY-MM-DD if visible else null. apply_url = official apply link if present else source URL.
 
-Return JSON of the shape:
-{ "items": [ { "title": string, "organization": string, "location": string, "description": string (max 400 chars), "deadline": "YYYY-MM-DD" | null, "apply_url": string | null } ] }`;
+Return STRICT JSON only:
+{ "items": [ { "title": string, "organization": string, "location": string, "description": string, "deadline": "YYYY-MM-DD"|null, "apply_url": string|null } ] }
+
+Content:
+"""${pageText}"""`;
 
     const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

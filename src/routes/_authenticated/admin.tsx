@@ -82,9 +82,25 @@ function AdminPage() {
       organization: p.organization ?? "", location: p.location ?? "",
       description: p.description ?? "", deadline: p.deadline ?? "",
       source_url: p.source_url ?? "", apply_url: p.apply_url ?? "",
-      ad_image_url: p.ad_image_url ?? "", is_featured: p.is_featured, is_active: true,
+      ad_image_url: p.ad_image_url ?? "", is_featured: !!p.is_featured, is_active: p.is_active ?? true,
     });
     setDialogOpen(true);
+  };
+
+  const toggleFeatured = async (p: Posting) => {
+    try {
+      await upsertFn({ data: {
+        id: p.id, type: p.type, title: p.title,
+        organization: p.organization ?? null, location: p.location ?? null,
+        description: p.description ?? null, deadline: p.deadline ?? null,
+        source_url: p.source_url ?? null, apply_url: p.apply_url ?? null,
+        ad_image_url: p.ad_image_url ?? null,
+        is_featured: !p.is_featured, is_active: p.is_active ?? true,
+      } as never });
+      toast.success(!p.is_featured ? "Featured" : "Unfeatured");
+      qc.invalidateQueries({ queryKey: ["admin-postings"] });
+      qc.invalidateQueries({ queryKey: ["postings"] });
+    } catch (e) { toast.error(e instanceof Error ? e.message : "Failed"); }
   };
 
   const save = async () => {
@@ -140,6 +156,31 @@ function AdminPage() {
     } catch (e) { toast.error(e instanceof Error ? e.message : "Failed"); }
   };
 
+  const importAll = async () => {
+    if (!fetchResults.length) return;
+    let ok = 0;
+    for (const item of fetchResults) {
+      try {
+        await upsertFn({ data: {
+          type: fetchType,
+          title: item.title ?? "Untitled",
+          organization: item.organization ?? null,
+          location: item.location ?? null,
+          description: item.description ?? null,
+          deadline: item.deadline || null,
+          source_url: fetchUrl,
+          apply_url: item.apply_url ?? null,
+          ad_image_url: null,
+          is_featured: false, is_active: true,
+        } as never });
+        ok++;
+      } catch { /* skip */ }
+    }
+    toast.success(`${ok}/${fetchResults.length} imported`);
+    qc.invalidateQueries({ queryKey: ["admin-postings"] });
+    qc.invalidateQueries({ queryKey: ["postings"] });
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
     navigate({ to: "/" });
@@ -179,9 +220,15 @@ function AdminPage() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <Button onClick={runFetch} disabled={!fetchUrl || fetchLoading} className="gap-2">
-                    {fetchLoading ? <><RefreshCw className="h-4 w-4 animate-spin" /> Fetching…</> : <>Extract</>}
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button onClick={runFetch} disabled={!fetchUrl || fetchLoading} className="gap-2">
+                      {fetchLoading ? <><RefreshCw className="h-4 w-4 animate-spin" /> Fetching…</> : <>Extract all posts</>}
+                    </Button>
+                    {fetchResults.length > 0 && (
+                      <Button variant="secondary" onClick={importAll} className="gap-2">Import all ({fetchResults.length})</Button>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Tip: PPSC/FPSC ad ka PDF ya webpage URL do — andar ki har post alag entry ban kar aayegi.</p>
                   <div className="max-h-80 overflow-auto space-y-2">
                     {fetchResults.map((it, i) => (
                       <div key={i} className="rounded-lg border p-3 text-sm">
@@ -243,7 +290,7 @@ function AdminPage() {
                         <TableCell className="font-medium max-w-md truncate">{p.title}</TableCell>
                         <TableCell className="text-sm text-muted-foreground">{p.organization}</TableCell>
                         <TableCell className="text-sm">{p.deadline ? new Date(p.deadline).toLocaleDateString() : "—"}</TableCell>
-                        <TableCell>{p.is_featured ? <Badge>Yes</Badge> : <Badge variant="outline">No</Badge>}</TableCell>
+                        <TableCell><Switch checked={!!p.is_featured} onCheckedChange={() => toggleFeatured(p)} /></TableCell>
                         <TableCell className="text-right">
                           <Button variant="ghost" size="icon" onClick={() => openEdit(p)}><Pencil className="h-4 w-4" /></Button>
                           <Button variant="ghost" size="icon" onClick={() => remove(p.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>

@@ -15,6 +15,7 @@ export type Posting = {
   ad_image_url: string | null;
   apply_url: string | null;
   is_featured: boolean;
+  is_active?: boolean;
   created_at: string;
 };
 
