@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { SiteShell } from "@/components/site-shell";
 import { PostingCard, type Posting } from "@/components/posting-card";
-import { listPostings } from "@/lib/postings.functions";
+import { listPostings, countPostings } from "@/lib/postings.functions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, GraduationCap, HandCoins, FileStack, ArrowRight, Phone, MessageCircle, MapPin, Sparkles, ShieldCheck, Printer, ScrollText } from "lucide-react";
