@@ -80,9 +80,9 @@ function HomePage() {
             <div className="glass rounded-3xl p-6 shadow-2xl shadow-primary/10">
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { icon: Briefcase, label: "Live Jobs", value: data.filter(d=>d.type==="job").length, to: "/jobs" },
-                  { icon: GraduationCap, label: "Admissions", value: data.filter(d=>d.type==="admission").length, to: "/admissions" },
-                  { icon: HandCoins, label: "Schemes", value: data.filter(d=>d.type==="scheme").length, to: "/schemes" },
+                  { icon: Briefcase, label: "Live Jobs", value: counts.job, to: "/jobs" },
+                  { icon: GraduationCap, label: "Admissions", value: counts.admission, to: "/admissions" },
+                  { icon: HandCoins, label: "Schemes", value: counts.scheme, to: "/schemes" },
                   { icon: ScrollText, label: "E-Stamp", value: "100/200/300", to: "/estamp" },
                 ].map((s) => (
                   <Link key={s.label} to={s.to} className="rounded-2xl border bg-card/80 p-4 hover:border-primary/40 hover:shadow-md transition-all">
