@@ -156,6 +156,31 @@ function AdminPage() {
     } catch (e) { toast.error(e instanceof Error ? e.message : "Failed"); }
   };
 
+  const importAll = async () => {
+    if (!fetchResults.length) return;
+    let ok = 0;
+    for (const item of fetchResults) {
+      try {
+        await upsertFn({ data: {
+          type: fetchType,
+          title: item.title ?? "Untitled",
+          organization: item.organization ?? null,
+          location: item.location ?? null,
+          description: item.description ?? null,
+          deadline: item.deadline || null,
+          source_url: fetchUrl,
+          apply_url: item.apply_url ?? null,
+          ad_image_url: null,
+          is_featured: false, is_active: true,
+        } as never });
+        ok++;
+      } catch { /* skip */ }
+    }
+    toast.success(`${ok}/${fetchResults.length} imported`);
+    qc.invalidateQueries({ queryKey: ["admin-postings"] });
+    qc.invalidateQueries({ queryKey: ["postings"] });
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
     navigate({ to: "/" });
