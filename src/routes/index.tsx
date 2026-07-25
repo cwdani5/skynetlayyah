@@ -6,6 +6,7 @@ import { listPostings, countPostings } from "@/lib/postings.functions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, GraduationCap, HandCoins, FileStack, ArrowRight, Phone, MessageCircle, MapPin, Sparkles, ShieldCheck, Printer, ScrollText } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const jobsQuery = queryOptions({
   queryKey: ["postings", "home", "job"],
