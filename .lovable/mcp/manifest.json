@@ -1,0 +1,249 @@
+{
+  "version": 1,
+  "sdk_version": "0.24.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://xligygbkjeyhzspjgvxf.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "skynet-layyah-mcp",
+      "version": "0.1.0",
+      "title": "Skynet Layyah MCP"
+    },
+    "tools": [
+      {
+        "name": "list_postings",
+        "title": "List postings",
+        "description": "List active Skynet Layyah postings (jobs, admissions, or government schemes) filtered by type. Returns title, organization, location, deadline, and apply URL for each posting whose deadline is today or later.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "type": {
+              "description": "Filter by posting type. Omit to return all types.",
+              "type": "string",
+              "enum": [
+                "job",
+                "admission",
+                "scheme"
+              ]
+            },
+            "limit": {
+              "description": "Max rows to return (1-100). Defaults to 50.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_posting",
+        "title": "Create posting",
+        "description": "Create a new Skynet Layyah posting (job, admission, or scheme). Admin-only — the signed-in user must have the admin role. Returns the created row.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "job",
+                "admission",
+                "scheme"
+              ],
+              "description": "Posting category."
+            },
+            "title": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 300,
+              "description": "Post title, e.g. 'Assistant Director (BS-17)'."
+            },
+            "organization": {
+              "description": "Department/organization name.",
+              "type": "string",
+              "maxLength": 200
+            },
+            "location": {
+              "description": "City/region.",
+              "type": "string",
+              "maxLength": 200
+            },
+            "description": {
+              "description": "Short description including qualification, vacancies, BPS if any.",
+              "type": "string",
+              "maxLength": 4000
+            },
+            "deadline": {
+              "description": "Application deadline as YYYY-MM-DD, or omit if none.",
+              "type": "string"
+            },
+            "source_url": {
+              "description": "Official advertisement/source URL.",
+              "type": "string",
+              "format": "uri"
+            },
+            "apply_url": {
+              "description": "Direct apply URL if present.",
+              "type": "string",
+              "format": "uri"
+            },
+            "ad_image_url": {
+              "description": "Advertisement image URL if any.",
+              "type": "string",
+              "format": "uri"
+            },
+            "is_featured": {
+              "description": "Feature this posting on the homepage. Defaults to false.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "type",
+            "title"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "update_posting",
+        "title": "Update posting",
+        "description": "Update fields on an existing Skynet Layyah posting. Admin-only. Only supplied fields are changed.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "Posting ID (UUID) to update."
+            },
+            "title": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 300
+            },
+            "organization": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "location": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "description": {
+              "type": "string",
+              "maxLength": 4000
+            },
+            "deadline": {
+              "description": "YYYY-MM-DD or null to clear.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source_url": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uri"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "apply_url": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uri"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "ad_image_url": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uri"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "is_featured": {
+              "type": "boolean"
+            },
+            "is_active": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "delete_posting",
+        "title": "Delete posting",
+        "description": "Permanently delete a Skynet Layyah posting by ID. Admin-only. This cannot be undone.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "Posting ID (UUID) to delete."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
