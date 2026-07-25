@@ -82,9 +82,25 @@ function AdminPage() {
       organization: p.organization ?? "", location: p.location ?? "",
       description: p.description ?? "", deadline: p.deadline ?? "",
       source_url: p.source_url ?? "", apply_url: p.apply_url ?? "",
-      ad_image_url: p.ad_image_url ?? "", is_featured: p.is_featured, is_active: true,
+      ad_image_url: p.ad_image_url ?? "", is_featured: !!p.is_featured, is_active: p.is_active ?? true,
     });
     setDialogOpen(true);
+  };
+
+  const toggleFeatured = async (p: Posting) => {
+    try {
+      await upsertFn({ data: {
+        id: p.id, type: p.type, title: p.title,
+        organization: p.organization ?? null, location: p.location ?? null,
+        description: p.description ?? null, deadline: p.deadline ?? null,
+        source_url: p.source_url ?? null, apply_url: p.apply_url ?? null,
+        ad_image_url: p.ad_image_url ?? null,
+        is_featured: !p.is_featured, is_active: p.is_active ?? true,
+      } as never });
+      toast.success(!p.is_featured ? "Featured" : "Unfeatured");
+      qc.invalidateQueries({ queryKey: ["admin-postings"] });
+      qc.invalidateQueries({ queryKey: ["postings"] });
+    } catch (e) { toast.error(e instanceof Error ? e.message : "Failed"); }
   };
 
   const save = async () => {
