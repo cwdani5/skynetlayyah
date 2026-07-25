@@ -1,10 +1,9 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Phone, MessageCircle, MapPin, Menu, X, Sun, Moon, ShieldCheck } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Phone, MessageCircle, MapPin, Menu, X, ShieldCheck } from "lucide-react";
+import { useState } from "react";
 import { Logo } from "./logo";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { toggleTheme, isDark } from "@/lib/theme";
 
 const nav = [
   { to: "/", label: "Home" },
