@@ -7,9 +7,21 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, GraduationCap, HandCoins, FileStack, ArrowRight, Phone, MessageCircle, MapPin, Sparkles, ShieldCheck, Printer, ScrollText } from "lucide-react";
 
-const featuredQuery = queryOptions({
-  queryKey: ["postings", "featured"],
-  queryFn: () => listPostings({ data: { limit: 30 } }) as Promise<Posting[]>,
+const jobsQuery = queryOptions({
+  queryKey: ["postings", "home", "job"],
+  queryFn: () => listPostings({ data: { type: "job", limit: 3 } }) as Promise<Posting[]>,
+});
+const admissionsQuery = queryOptions({
+  queryKey: ["postings", "home", "admission"],
+  queryFn: () => listPostings({ data: { type: "admission", limit: 3 } }) as Promise<Posting[]>,
+});
+const schemesQuery = queryOptions({
+  queryKey: ["postings", "home", "scheme"],
+  queryFn: () => listPostings({ data: { type: "scheme", limit: 3 } }) as Promise<Posting[]>,
+});
+const countsQuery = queryOptions({
+  queryKey: ["postings", "home", "all"],
+  queryFn: () => listPostings({ data: { limit: 100 } }) as Promise<Posting[]>,
 });
 
 export const Route = createFileRoute("/")({
@@ -21,15 +33,21 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "Latest jobs, admissions & e-stamp services at Skynet Layyah." },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(featuredQuery),
+  loader: ({ context }) => Promise.all([
+    context.queryClient.ensureQueryData(jobsQuery),
+    context.queryClient.ensureQueryData(admissionsQuery),
+    context.queryClient.ensureQueryData(schemesQuery),
+    context.queryClient.ensureQueryData(countsQuery),
+  ]),
   component: HomePage,
 });
 
 function HomePage() {
-  const { data } = useSuspenseQuery(featuredQuery);
-  const jobs = data.filter((p) => p.type === "job").slice(0, 3);
-  const admissions = data.filter((p) => p.type === "admission").slice(0, 3);
-  const schemes = data.filter((p) => p.type === "scheme").slice(0, 3);
+  const { data: jobs } = useSuspenseQuery(jobsQuery);
+  const { data: admissions } = useSuspenseQuery(admissionsQuery);
+  const { data: schemes } = useSuspenseQuery(schemesQuery);
+  const { data } = useSuspenseQuery(countsQuery);
+
 
   return (
     <SiteShell>
