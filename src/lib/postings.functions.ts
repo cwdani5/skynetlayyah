@@ -35,6 +35,20 @@ export const listPostings = createServerFn({ method: "GET" })
     return rows ?? [];
   });
 
+export const countPostings = createServerFn({ method: "GET" })
+  .handler(async () => {
+    const sb = serverPublic();
+    const today = new Date().toISOString().slice(0, 10);
+    const types = ["job", "admission", "scheme"] as const;
+    const out: Record<string, number> = { job: 0, admission: 0, scheme: 0 };
+    for (const t of types) {
+      const { count } = await sb.from("postings").select("*", { count: "exact", head: true })
+        .eq("is_active", true).eq("type", t).or(`deadline.is.null,deadline.gte.${today}`);
+      out[t] = count ?? 0;
+    }
+    return out as { job: number; admission: number; scheme: number };
+  });
+
 const PostingInput = z.object({
   id: z.string().uuid().optional(),
   type: z.enum(["job", "admission", "scheme"]),

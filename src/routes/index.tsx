@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { SiteShell } from "@/components/site-shell";
 import { PostingCard, type Posting } from "@/components/posting-card";
-import { listPostings } from "@/lib/postings.functions";
+import { listPostings, countPostings } from "@/lib/postings.functions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, GraduationCap, HandCoins, FileStack, ArrowRight, Phone, MessageCircle, MapPin, Sparkles, ShieldCheck, Printer, ScrollText } from "lucide-react";
@@ -20,8 +20,8 @@ const schemesQuery = queryOptions({
   queryFn: () => listPostings({ data: { type: "scheme", limit: 3 } }) as Promise<Posting[]>,
 });
 const countsQuery = queryOptions({
-  queryKey: ["postings", "home", "all"],
-  queryFn: () => listPostings({ data: { limit: 100 } }) as Promise<Posting[]>,
+  queryKey: ["postings", "home", "counts"],
+  queryFn: () => countPostings(),
 });
 
 export const Route = createFileRoute("/")({
@@ -46,7 +46,7 @@ function HomePage() {
   const { data: jobs } = useSuspenseQuery(jobsQuery);
   const { data: admissions } = useSuspenseQuery(admissionsQuery);
   const { data: schemes } = useSuspenseQuery(schemesQuery);
-  const { data } = useSuspenseQuery(countsQuery);
+  const { data: counts } = useSuspenseQuery(countsQuery);
 
 
   return (
@@ -80,9 +80,9 @@ function HomePage() {
             <div className="glass rounded-3xl p-6 shadow-2xl shadow-primary/10">
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { icon: Briefcase, label: "Live Jobs", value: data.filter(d=>d.type==="job").length, to: "/jobs" },
-                  { icon: GraduationCap, label: "Admissions", value: data.filter(d=>d.type==="admission").length, to: "/admissions" },
-                  { icon: HandCoins, label: "Schemes", value: data.filter(d=>d.type==="scheme").length, to: "/schemes" },
+                  { icon: Briefcase, label: "Live Jobs", value: counts.job, to: "/jobs" },
+                  { icon: GraduationCap, label: "Admissions", value: counts.admission, to: "/admissions" },
+                  { icon: HandCoins, label: "Schemes", value: counts.scheme, to: "/schemes" },
                   { icon: ScrollText, label: "E-Stamp", value: "100/200/300", to: "/estamp" },
                 ].map((s) => (
                   <Link key={s.label} to={s.to} className="rounded-2xl border bg-card/80 p-4 hover:border-primary/40 hover:shadow-md transition-all">
