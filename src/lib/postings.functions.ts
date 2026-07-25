@@ -26,7 +26,8 @@ export const listPostings = createServerFn({ method: "GET" })
     z.object({ type: TypeSchema, limit: z.number().min(1).max(100).optional() }).parse(input ?? {}))
   .handler(async ({ data }) => {
     const sb = serverPublic();
-    let q = sb.from("postings").select("*").eq("is_active", true).order("is_featured", { ascending: false }).order("created_at", { ascending: false });
+    const today = new Date().toISOString().slice(0, 10);
+    let q = sb.from("postings").select("*").eq("is_active", true).or(`deadline.is.null,deadline.gte.${today}`).order("is_featured", { ascending: false }).order("created_at", { ascending: false });
     if (data.type) q = q.eq("type", data.type);
     if (data.limit) q = q.limit(data.limit);
     const { data: rows, error } = await q;
