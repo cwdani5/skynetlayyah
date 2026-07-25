@@ -85,9 +85,9 @@ function HomePage() {
                   { icon: HandCoins, label: "Schemes", value: counts.scheme, to: "/schemes" },
                   { icon: ScrollText, label: "E-Stamp", value: "100/200/300", to: "/estamp" },
                 ].map((s) => (
-                  <Link key={s.label} to={s.to} className="rounded-2xl border bg-card/80 p-4 hover:border-primary/40 hover:shadow-md transition-all">
+                  <Link key={s.label} to={s.to} className="rounded-2xl border bg-card/80 p-4 hover:border-primary/40 hover:shadow-md transition-all min-w-0">
                     <s.icon className="h-6 w-6 text-primary" />
-                    <div className="mt-3 text-2xl font-bold">{s.value}</div>
+                    <div className="mt-3 text-lg sm:text-xl md:text-2xl font-bold break-words">{s.value}</div>
                     <div className="text-xs text-muted-foreground">{s.label}</div>
                   </Link>
                 ))}
