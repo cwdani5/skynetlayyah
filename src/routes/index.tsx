@@ -46,7 +46,7 @@ function HomePage() {
   const { data: jobs } = useSuspenseQuery(jobsQuery);
   const { data: admissions } = useSuspenseQuery(admissionsQuery);
   const { data: schemes } = useSuspenseQuery(schemesQuery);
-  const { data } = useSuspenseQuery(countsQuery);
+  const { data: counts } = useSuspenseQuery(countsQuery);
 
 
   return (
