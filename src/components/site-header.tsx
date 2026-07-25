@@ -21,14 +21,14 @@ export function SiteHeader() {
   return (
     <>
       {/* Top strip */}
-      <div className="hidden md:block border-b bg-primary text-primary-foreground text-xs">
+      <div className="hidden lg:block border-b bg-primary text-primary-foreground text-xs">
         <div className="max-w-7xl mx-auto px-4 h-9 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4 opacity-90">
-            <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> Housing Colony, Computer Market, Layyah</span>
+          <div className="flex items-center gap-4 opacity-90 min-w-0">
+            <span className="flex items-center gap-1.5 truncate"><MapPin className="h-3.5 w-3.5 shrink-0" /> Housing Colony, Computer Market, Layyah</span>
             <span className="opacity-40">•</span>
-            <span>E-Stamp Papers: PKR 100 / 200 / 300 available</span>
+            <span className="truncate">E-Stamp Papers: PKR 100 / 200 / 300 available</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 shrink-0">
             <a href="tel:03026760999" className="flex items-center gap-1.5 hover:underline"><Phone className="h-3.5 w-3.5" /> 0302-6760999</a>
             <a href="https://wa.me/923026760999" target="_blank" rel="noreferrer" className="flex items-center gap-1.5 hover:underline"><MessageCircle className="h-3.5 w-3.5" /> WhatsApp</a>
           </div>
@@ -37,9 +37,9 @@ export function SiteHeader() {
 
       <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
-          <Link to="/" className="shrink-0"><Logo /></Link>
+          <Link to="/" className="shrink-0 min-w-0"><Logo /></Link>
 
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1">
             {nav.map((n) => {
               const active = n.to === "/" ? pathname === "/" : pathname.startsWith(n.to);
               return (
@@ -47,7 +47,7 @@ export function SiteHeader() {
                   key={n.to}
                   to={n.to}
                   className={cn(
-                    "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                    "px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap",
                     active ? "bg-primary/10 text-primary" : "text-foreground/70 hover:bg-muted hover:text-foreground",
                   )}
                 >
@@ -57,21 +57,21 @@ export function SiteHeader() {
             })}
           </nav>
 
-          <div className="flex items-center gap-1.5">
-            <Link to="/auth" className="hidden md:inline-flex">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <Link to="/auth" className="hidden lg:inline-flex">
               <Button size="sm" variant="outline" className="h-9 gap-1.5"><ShieldCheck className="h-3.5 w-3.5" /> Admin</Button>
             </Link>
-            <a href="https://wa.me/923026760999" target="_blank" rel="noreferrer" className="hidden md:inline-flex">
+            <a href="https://wa.me/923026760999" target="_blank" rel="noreferrer" className="hidden lg:inline-flex">
               <Button size="sm" className="h-9 gap-1.5"><MessageCircle className="h-4 w-4" /> Contact</Button>
             </a>
-            <button className="md:hidden h-9 w-9 grid place-items-center rounded-md hover:bg-muted" onClick={() => setOpen((v) => !v)} aria-label="Menu">
+            <button className="lg:hidden h-9 w-9 grid place-items-center rounded-md hover:bg-muted" onClick={() => setOpen((v) => !v)} aria-label="Menu">
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
 
         {open && (
-          <div className="md:hidden border-t bg-background">
+          <div className="lg:hidden border-t bg-background">
             <div className="px-4 py-3 space-y-1">
               {nav.map((n) => (
                 <Link key={n.to} to={n.to} onClick={() => setOpen(false)}
