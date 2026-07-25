@@ -69,7 +69,7 @@ export function PostingCard({ p }: { p: Posting }) {
               <Button size="sm" className="w-full gap-1.5">Apply / Details <ExternalLink className="h-3.5 w-3.5" /></Button>
             </a>
           )}
-          <a href="https://wa.me/923026760999" target="_blank" rel="noreferrer">
+          <a href={askHref} target="_blank" rel="noreferrer">
             <Button size="sm" variant="outline">Ask Skynet</Button>
           </a>
         </div>
