@@ -259,7 +259,7 @@ function AdminPage() {
                         <TableCell className="font-medium max-w-md truncate">{p.title}</TableCell>
                         <TableCell className="text-sm text-muted-foreground">{p.organization}</TableCell>
                         <TableCell className="text-sm">{p.deadline ? new Date(p.deadline).toLocaleDateString() : "—"}</TableCell>
-                        <TableCell>{p.is_featured ? <Badge>Yes</Badge> : <Badge variant="outline">No</Badge>}</TableCell>
+                        <TableCell><Switch checked={!!p.is_featured} onCheckedChange={() => toggleFeatured(p)} /></TableCell>
                         <TableCell className="text-right">
                           <Button variant="ghost" size="icon" onClick={() => openEdit(p)}><Pencil className="h-4 w-4" /></Button>
                           <Button variant="ghost" size="icon" onClick={() => remove(p.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
