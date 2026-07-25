@@ -171,7 +171,7 @@ function AdminPage() {
           source_url: fetchUrl,
           apply_url: item.apply_url ?? null,
           ad_image_url: null,
-          is_featured: false, is_active: true,
+          is_featured: true, is_active: true,
         } as never });
         ok++;
       } catch { /* skip */ }
