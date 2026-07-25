@@ -80,14 +80,14 @@ function HomePage() {
             <div className="glass rounded-3xl p-6 shadow-2xl shadow-primary/10">
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { icon: Briefcase, label: "Live Jobs", value: counts.job, to: "/jobs" },
-                  { icon: GraduationCap, label: "Admissions", value: counts.admission, to: "/admissions" },
-                  { icon: HandCoins, label: "Schemes", value: counts.scheme, to: "/schemes" },
-                  { icon: ScrollText, label: "E-Stamp", value: "100/200/300", to: "/estamp" },
+                  { icon: Briefcase, label: "Live Jobs", value: String(counts.job), to: "/jobs", big: true },
+                  { icon: GraduationCap, label: "Admissions", value: String(counts.admission), to: "/admissions", big: true },
+                  { icon: HandCoins, label: "Schemes", value: String(counts.scheme), to: "/schemes", big: true },
+                  { icon: ScrollText, label: "E-Stamp Paper", value: "Rs 100 · 200 · 300", to: "/estamp", big: false },
                 ].map((s) => (
                   <Link key={s.label} to={s.to} className="rounded-2xl border bg-card/80 p-4 hover:border-primary/40 hover:shadow-md transition-all min-w-0">
                     <s.icon className="h-6 w-6 text-primary" />
-                    <div className="mt-3 text-lg sm:text-xl md:text-2xl font-bold break-words">{s.value}</div>
+                    <div className={cn("mt-3 font-bold tracking-tight break-words", s.big ? "text-2xl" : "text-sm sm:text-base md:text-lg")}>{s.value}</div>
                     <div className="text-xs text-muted-foreground">{s.label}</div>
                   </Link>
                 ))}
