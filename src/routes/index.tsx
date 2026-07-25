@@ -160,14 +160,21 @@ function HomePage() {
       {/* Extra shop services */}
       <section className="max-w-7xl mx-auto px-4 pb-16">
         <h2 className="text-2xl md:text-3xl font-bold">Hamari shop par aur bhi services</h2>
+        <p className="text-sm text-muted-foreground mt-1">Verifications, domiciles, WAPDA files aur documentation — sab ek jaga.</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {[
+            { i: ShieldCheck, t: "IBCC Verification", d: "Foreign/local equivalence certificates ki attestation." },
+            { i: ShieldCheck, t: "Board Verification", d: "BISE (Matric/Inter) result & certificate verification." },
+            { i: ShieldCheck, t: "HEC Verification", d: "Degree attestation for HEC — online booking + submission." },
+            { i: ShieldCheck, t: "MOFA Verification", d: "Ministry of Foreign Affairs attestation for abroad use." },
+            { i: MapPin, t: "Domicile (Layyah/Karor/Chaubara)", d: "Domicile certificate application & processing." },
+            { i: ScrollText, t: "WAPDA Files & Applications", d: "Naya meter, load extension, name change, bills." },
             { i: FileStack, t: "Online Job Applications", d: "FPSC/PPSC/NTS/etc. forms submission." },
-            { i: GraduationCap, t: "Admission Forms", d: "Universities aur colleges ki forms." },
-            { i: HandCoins, t: "BISP / Ehsaas Check", d: "Eligibility aur payment status." },
-            { i: ShieldCheck, t: "NADRA & Utility Bills", d: "Bill payments, verification." },
-            { i: Printer, t: "Printing / Scanning", d: "Color/B&W printing, scanning, typing." },
-            { i: ScrollText, t: "Legal Documents", d: "Affidavits, agreements typing + stamp." },
+            { i: GraduationCap, t: "Admission Forms", d: "Universities aur colleges ki forms online." },
+            { i: HandCoins, t: "BISP / Ehsaas Check", d: "Eligibility aur payment status verification." },
+            { i: ShieldCheck, t: "NADRA & Utility Bills", d: "Bill payments aur NADRA services." },
+            { i: Printer, t: "Printing / Scanning / Typing", d: "Color/B&W printing, scanning, composing." },
+            { i: ScrollText, t: "Legal Documents & Affidavits", d: "Agreements, affidavits typing + e-stamp." },
           ].map((s) => (
             <div key={s.t} className="rounded-2xl border bg-card p-5 hover:border-primary/40 transition">
               <s.i className="h-6 w-6 text-primary" />
@@ -177,6 +184,7 @@ function HomePage() {
           ))}
         </div>
       </section>
+
     </SiteShell>
   );
 }
