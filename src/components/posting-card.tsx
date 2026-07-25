@@ -28,6 +28,8 @@ const typeStyles: Record<Posting["type"], { label: string; className: string }> 
 export function PostingCard({ p }: { p: Posting }) {
   const style = typeStyles[p.type];
   const daysLeft = p.deadline ? Math.ceil((new Date(p.deadline).getTime() - Date.now()) / 86400000) : null;
+  const askMsg = `Assalamualaikum Skynet,\n\nMujhe is ${style.label.toLowerCase()} ke baare mein maloomat chahiye:\n\n• ${p.title}${p.organization ? `\n• Idara: ${p.organization}` : ""}${p.location ? `\n• Location: ${p.location}` : ""}${p.deadline ? `\n• Deadline: ${new Date(p.deadline).toLocaleDateString()}` : ""}${p.apply_url ? `\n• Link: ${p.apply_url}` : p.source_url ? `\n• Link: ${p.source_url}` : ""}\n\nApply/form fill karne mein madad chahiye. Shukriya!`;
+  const askHref = `https://wa.me/923026760999?text=${encodeURIComponent(askMsg)}`;
 
   return (
     <article className="group relative flex flex-col rounded-2xl border bg-card overflow-hidden hover:shadow-lg hover:border-primary/30 transition-all">
@@ -67,7 +69,7 @@ export function PostingCard({ p }: { p: Posting }) {
               <Button size="sm" className="w-full gap-1.5">Apply / Details <ExternalLink className="h-3.5 w-3.5" /></Button>
             </a>
           )}
-          <a href="https://wa.me/923026760999" target="_blank" rel="noreferrer">
+          <a href={askHref} target="_blank" rel="noreferrer">
             <Button size="sm" variant="outline">Ask Skynet</Button>
           </a>
         </div>

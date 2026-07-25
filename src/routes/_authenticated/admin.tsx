@@ -170,7 +170,7 @@ function AdminPage() {
           deadline: item.deadline || null,
           source_url: fetchUrl,
           apply_url: item.apply_url ?? null,
-          ad_image_url: null,
+          ad_image_url: /\.(png|jpe?g|webp|gif|bmp)(\?|$)/i.test(fetchUrl) ? fetchUrl : null,
           is_featured: true, is_active: true,
         } as never });
         ok++;

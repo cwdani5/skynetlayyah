@@ -106,10 +106,21 @@ export const extractFromUrl = createServerFn({ method: "POST" })
 
     let pageText = "";
     let isPdf = false;
+    let isImage = false;
+    let imageDataUrl = "";
     try {
       const res = await fetch(data.url, { headers: { "User-Agent": "Mozilla/5.0 SkynetBot" } });
       const ct = res.headers.get("content-type") ?? "";
-      if (ct.includes("pdf") || data.url.toLowerCase().endsWith(".pdf")) {
+      const lower = data.url.toLowerCase();
+      const looksImage = ct.startsWith("image/") || /\.(png|jpe?g|webp|gif|bmp)(\?|$)/.test(lower);
+      if (looksImage) {
+        isImage = true;
+        const buf = new Uint8Array(await res.arrayBuffer());
+        let bin = ""; for (let i = 0; i < buf.length; i++) bin += String.fromCharCode(buf[i]);
+        const b64 = btoa(bin);
+        const mime = ct.startsWith("image/") ? ct.split(";")[0] : "image/jpeg";
+        imageDataUrl = `data:${mime};base64,${b64}`;
+      } else if (ct.includes("pdf") || lower.endsWith(".pdf")) {
         isPdf = true;
         const buf = new Uint8Array(await res.arrayBuffer());
         const txt = new TextDecoder("latin1").decode(buf);
@@ -120,29 +131,31 @@ export const extractFromUrl = createServerFn({ method: "POST" })
       }
     } catch { /* ignore */ }
 
-    const prompt = `You are extracting an EXHAUSTIVE list of individual ${data.type} postings from a Pakistani government / education advertisement${isPdf ? " (PDF)" : " webpage"} at ${data.url}.
+    const promptText = `You are extracting an EXHAUSTIVE list of individual ${data.type} postings from a Pakistani government / education advertisement${isImage ? " (image/scan of ad)" : isPdf ? " (PDF)" : " webpage"} at ${data.url}.
 
 RULES:
 - A single advertisement usually contains MANY separate posts (e.g. "Assistant Engineer", "Sub-Engineer", "Stenographer", "Clerk"). Return EACH post as its OWN item — do NOT merge.
 - Extract up to 50 items. Do not skip any listed post.
 - Per item capture: exact post title, department/organization, location, short description (<=300 chars) with BPS/scale, vacancies, qualification, age if present.
-- deadline as YYYY-MM-DD if visible else null. apply_url = official apply link if present else source URL.
+- deadline as YYYY-MM-DD if visible else null. apply_url = official apply link if present else null.
 
 Return STRICT JSON only:
-{ "items": [ { "title": string, "organization": string, "location": string, "description": string, "deadline": "YYYY-MM-DD"|null, "apply_url": string|null } ] }
+{ "items": [ { "title": string, "organization": string, "location": string, "description": string, "deadline": "YYYY-MM-DD"|null, "apply_url": string|null } ] }${isImage ? "" : `\n\nContent:\n"""${pageText}"""`}`;
 
-Content:
-"""${pageText}"""`;
+    const userContent = isImage
+      ? [{ type: "text", text: promptText }, { type: "image_url", image_url: { url: imageDataUrl } }]
+      : promptText;
 
     const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
-        messages: [{ role: "user", content: prompt }],
+        messages: [{ role: "user", content: userContent }],
         response_format: { type: "json_object" },
       }),
     });
+
     if (!resp.ok) {
       const err = await resp.text();
       throw new Error(`AI extract failed: ${resp.status} ${err.slice(0, 200)}`);
