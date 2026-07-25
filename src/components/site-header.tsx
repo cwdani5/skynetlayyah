@@ -1,10 +1,9 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Phone, MessageCircle, MapPin, Menu, X, Sun, Moon, ShieldCheck } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Phone, MessageCircle, MapPin, Menu, X, ShieldCheck } from "lucide-react";
+import { useState } from "react";
 import { Logo } from "./logo";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { toggleTheme, isDark } from "@/lib/theme";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -18,8 +17,6 @@ const nav = [
 export function SiteHeader() {
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
-  const [dark, setDark] = useState(false);
-  useEffect(() => setDark(isDark()), []);
 
   return (
     <>
@@ -61,9 +58,6 @@ export function SiteHeader() {
           </nav>
 
           <div className="flex items-center gap-1.5">
-            <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => { toggleTheme(); setDark(isDark()); }}>
-              {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
             <Link to="/auth" className="hidden md:inline-flex">
               <Button size="sm" variant="outline" className="h-9 gap-1.5"><ShieldCheck className="h-3.5 w-3.5" /> Admin</Button>
             </Link>
