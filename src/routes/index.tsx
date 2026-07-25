@@ -20,8 +20,8 @@ const schemesQuery = queryOptions({
   queryFn: () => listPostings({ data: { type: "scheme", limit: 3 } }) as Promise<Posting[]>,
 });
 const countsQuery = queryOptions({
-  queryKey: ["postings", "home", "all"],
-  queryFn: () => listPostings({ data: { limit: 100 } }) as Promise<Posting[]>,
+  queryKey: ["postings", "home", "counts"],
+  queryFn: () => countPostings(),
 });
 
 export const Route = createFileRoute("/")({
