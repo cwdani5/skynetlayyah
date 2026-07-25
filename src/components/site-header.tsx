@@ -17,8 +17,6 @@ const nav = [
 export function SiteHeader() {
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
-  const [dark, setDark] = useState(false);
-  useEffect(() => setDark(isDark()), []);
 
   return (
     <>
