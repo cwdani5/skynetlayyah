@@ -266,13 +266,40 @@ function AdminPage() {
         )}
 
         <Tabs value={tab} onValueChange={(v) => setTab(v as never)}>
-          <TabsList>
+          <TabsList className="w-full justify-start overflow-x-auto">
             <TabsTrigger value="job">Jobs <Badge variant="secondary" className="ml-2">{counts.job}</Badge></TabsTrigger>
             <TabsTrigger value="admission">Admissions <Badge variant="secondary" className="ml-2">{counts.admission}</Badge></TabsTrigger>
             <TabsTrigger value="scheme">Schemes <Badge variant="secondary" className="ml-2">{counts.scheme}</Badge></TabsTrigger>
           </TabsList>
           <TabsContent value={tab} className="mt-4">
-            <Card>
+            {/* Mobile: card list */}
+            <div className="grid gap-3 md:hidden">
+              {filtered.map((p) => (
+                <Card key={p.id}>
+                  <CardContent className="p-4 space-y-2">
+                    <div className="font-semibold text-sm break-words">{p.title}</div>
+                    <div className="text-xs text-muted-foreground break-words">
+                      {p.organization || "—"} · {p.deadline ? new Date(p.deadline).toLocaleDateString() : "No deadline"}
+                    </div>
+                    <div className="flex items-center justify-between gap-2 pt-1">
+                      <label className="flex items-center gap-2 text-xs">
+                        <Switch checked={!!p.is_featured} onCheckedChange={() => toggleFeatured(p)} /> Featured
+                      </label>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <Button variant="ghost" size="icon" onClick={() => openEdit(p)}><Pencil className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="icon" onClick={() => remove(p.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+              {filtered.length === 0 && (
+                <div className="text-center py-10 text-muted-foreground text-sm">Koi entries nahi.</div>
+              )}
+            </div>
+
+            {/* Desktop: table */}
+            <Card className="hidden md:block">
               <CardContent className="p-0">
                 <Table>
                   <TableHeader>
@@ -306,6 +333,7 @@ function AdminPage() {
             </Card>
           </TabsContent>
         </Tabs>
+
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
