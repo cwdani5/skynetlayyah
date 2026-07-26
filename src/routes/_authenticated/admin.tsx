@@ -220,7 +220,7 @@ function AdminPage() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <Button onClick={runFetch} disabled={!fetchUrl || fetchLoading} className="gap-2">
                       {fetchLoading ? <><RefreshCw className="h-4 w-4 animate-spin" /> Fetching…</> : <>Extract all posts</>}
                     </Button>
