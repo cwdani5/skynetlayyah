@@ -8,7 +8,10 @@ export function SiteFooter() {
       <div className="max-w-7xl mx-auto px-4 py-12 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-2">
           <Logo size={44} />
-          <p className="mt-4 text-sm text-muted-foreground max-w-md">
+          <div className="mt-3 text-[11px] font-bold uppercase tracking-[0.26em] text-primary">
+            Cafe &amp; Photo Studio
+          </div>
+          <p className="mt-3 text-sm text-muted-foreground max-w-md">
             Skynet — Housing Colony Computer Market, Layyah. Latest government jobs, admissions,
             schemes ki information aur PKR 100 / 200 / 300 wale e-stamp paper services ek jaga.
           </p>

@@ -58,6 +58,9 @@ function HomePage() {
         <div className="relative max-w-7xl mx-auto px-4 py-14 md:py-20 grid gap-10 md:grid-cols-2 items-center">
           <div>
             <Badge className="mb-4 gap-1.5 bg-primary/10 text-primary hover:bg-primary/15 border-0"><Sparkles className="h-3 w-3" /> Layyah's trusted computer market service</Badge>
+            <div className="mb-3 text-[11px] sm:text-xs font-bold uppercase tracking-[0.28em] text-muted-foreground">
+              Cafe &amp; Photo Studio
+            </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight">
               Jobs, Admissions & E-Stamp — <span className="text-primary">ek jaga.</span>
             </h1>
