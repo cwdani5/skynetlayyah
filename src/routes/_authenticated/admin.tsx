@@ -196,17 +196,17 @@ function AdminPage() {
   return (
     <SiteShell>
       <section className="border-b bg-hero">
-        <div className="max-w-7xl mx-auto px-4 py-8 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-extrabold">Admin Panel</h1>
-            <p className="text-sm text-muted-foreground">Jobs, admissions aur schemes manage karen.</p>
+        <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold">Admin Panel</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground">Jobs, admissions aur schemes manage karen.</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
             <Dialog open={fetchOpen} onOpenChange={setFetchOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" className="gap-2"><Sparkles className="h-4 w-4" /> AI Auto-fetch</Button>
+                <Button variant="outline" className="gap-2 col-span-2 sm:col-span-1"><Sparkles className="h-4 w-4" /> AI Auto-fetch</Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl">
+              <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl max-h-[85vh] overflow-y-auto">
                 <DialogHeader><DialogTitle className="flex items-center gap-2"><Sparkles className="h-5 w-5 text-primary" /> Fetch from official website</DialogTitle></DialogHeader>
                 <div className="space-y-3">
                   <div className="grid gap-2 sm:grid-cols-[1fr_180px]">
@@ -220,7 +220,7 @@ function AdminPage() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <Button onClick={runFetch} disabled={!fetchUrl || fetchLoading} className="gap-2">
                       {fetchLoading ? <><RefreshCw className="h-4 w-4 animate-spin" /> Fetching…</> : <>Extract all posts</>}
                     </Button>
@@ -266,13 +266,40 @@ function AdminPage() {
         )}
 
         <Tabs value={tab} onValueChange={(v) => setTab(v as never)}>
-          <TabsList>
+          <TabsList className="w-full justify-start overflow-x-auto">
             <TabsTrigger value="job">Jobs <Badge variant="secondary" className="ml-2">{counts.job}</Badge></TabsTrigger>
             <TabsTrigger value="admission">Admissions <Badge variant="secondary" className="ml-2">{counts.admission}</Badge></TabsTrigger>
             <TabsTrigger value="scheme">Schemes <Badge variant="secondary" className="ml-2">{counts.scheme}</Badge></TabsTrigger>
           </TabsList>
           <TabsContent value={tab} className="mt-4">
-            <Card>
+            {/* Mobile: card list */}
+            <div className="grid gap-3 md:hidden">
+              {filtered.map((p) => (
+                <Card key={p.id}>
+                  <CardContent className="p-4 space-y-2">
+                    <div className="font-semibold text-sm break-words">{p.title}</div>
+                    <div className="text-xs text-muted-foreground break-words">
+                      {p.organization || "—"} · {p.deadline ? new Date(p.deadline).toLocaleDateString() : "No deadline"}
+                    </div>
+                    <div className="flex items-center justify-between gap-2 pt-1">
+                      <label className="flex items-center gap-2 text-xs">
+                        <Switch checked={!!p.is_featured} onCheckedChange={() => toggleFeatured(p)} /> Featured
+                      </label>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <Button variant="ghost" size="icon" onClick={() => openEdit(p)}><Pencil className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="icon" onClick={() => remove(p.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+              {filtered.length === 0 && (
+                <div className="text-center py-10 text-muted-foreground text-sm">Koi entries nahi.</div>
+              )}
+            </div>
+
+            {/* Desktop: table */}
+            <Card className="hidden md:block">
               <CardContent className="p-0">
                 <Table>
                   <TableHeader>
@@ -306,10 +333,11 @@ function AdminPage() {
             </Card>
           </TabsContent>
         </Tabs>
+
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl max-h-[85vh] overflow-y-auto">
           <DialogHeader><DialogTitle>{form.id ? "Edit" : "New"} posting</DialogTitle></DialogHeader>
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
@@ -360,7 +388,7 @@ function AdminPage() {
               <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} /> Active</label>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="flex-col-reverse gap-2 sm:flex-row">
             <Button variant="ghost" onClick={() => setDialogOpen(false)}>Cancel</Button>
             <Button onClick={save} disabled={saving || !form.title}>{saving ? "Saving…" : "Save"}</Button>
           </DialogFooter>
