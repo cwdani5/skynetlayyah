@@ -337,7 +337,7 @@ function AdminPage() {
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl max-h-[85vh] overflow-y-auto">
           <DialogHeader><DialogTitle>{form.id ? "Edit" : "New"} posting</DialogTitle></DialogHeader>
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
