@@ -388,7 +388,7 @@ function AdminPage() {
               <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} /> Active</label>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="flex-col-reverse gap-2 sm:flex-row">
             <Button variant="ghost" onClick={() => setDialogOpen(false)}>Cancel</Button>
             <Button onClick={save} disabled={saving || !form.title}>{saving ? "Saving…" : "Save"}</Button>
           </DialogFooter>
