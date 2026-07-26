@@ -18,8 +18,8 @@ export function Logo({ className, size = 44, showText = true }: { className?: st
             <span style={{ color: "#1e3a8a" }}>SKY</span>
             <span style={{ color: "#dc2626" }}>NET</span>
           </div>
-          <div className="hidden xs:block text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground truncate">
-            Cafe & Photo Studio · Layyah
+          <div className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.14em] sm:tracking-[0.16em] text-muted-foreground truncate">
+            Cafe &amp; Photo Studio · Layyah
           </div>
         </div>
       )}
