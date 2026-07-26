@@ -196,17 +196,17 @@ function AdminPage() {
   return (
     <SiteShell>
       <section className="border-b bg-hero">
-        <div className="max-w-7xl mx-auto px-4 py-8 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-extrabold">Admin Panel</h1>
-            <p className="text-sm text-muted-foreground">Jobs, admissions aur schemes manage karen.</p>
+        <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold">Admin Panel</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground">Jobs, admissions aur schemes manage karen.</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
             <Dialog open={fetchOpen} onOpenChange={setFetchOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" className="gap-2"><Sparkles className="h-4 w-4" /> AI Auto-fetch</Button>
+                <Button variant="outline" className="gap-2 col-span-2 sm:col-span-1"><Sparkles className="h-4 w-4" /> AI Auto-fetch</Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl">
+              <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl max-h-[85vh] overflow-y-auto">
                 <DialogHeader><DialogTitle className="flex items-center gap-2"><Sparkles className="h-5 w-5 text-primary" /> Fetch from official website</DialogTitle></DialogHeader>
                 <div className="space-y-3">
                   <div className="grid gap-2 sm:grid-cols-[1fr_180px]">
