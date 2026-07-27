@@ -112,12 +112,11 @@ export const extractFromUrl = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin({ supabase: context.supabase, userId: context.userId });
     const apiKey = process.env.LOVABLE_API_KEY;
-    if (!apiKey && !process.env.GROQ_API_KEY) throw new Error("AI service not configured");
-
+    const groqKey = process.env.GROQ_API_KEY;
+    if (!apiKey && !groqKey) throw new Error("AI service not configured");
 
     let pageText = "";
-    let isPdf = false;
-    let isImage = false;
+    let kind: "image" | "pdf" | "web" = "web";
     let imageDataUrl = "";
     try {
       const res = await fetch(data.url, { headers: { "User-Agent": "Mozilla/5.0 SkynetBot" } });
@@ -125,67 +124,72 @@ export const extractFromUrl = createServerFn({ method: "POST" })
       const lower = data.url.toLowerCase();
       const looksImage = ct.startsWith("image/") || /\.(png|jpe?g|webp|gif|bmp)(\?|$)/.test(lower);
       if (looksImage) {
-        isImage = true;
+        kind = "image";
         const buf = new Uint8Array(await res.arrayBuffer());
         let bin = ""; for (let i = 0; i < buf.length; i++) bin += String.fromCharCode(buf[i]);
         const b64 = btoa(bin);
         const mime = ct.startsWith("image/") ? ct.split(";")[0] : "image/jpeg";
         imageDataUrl = `data:${mime};base64,${b64}`;
       } else if (ct.includes("pdf") || lower.endsWith(".pdf")) {
-        isPdf = true;
+        kind = "pdf";
         const buf = new Uint8Array(await res.arrayBuffer());
         const txt = new TextDecoder("latin1").decode(buf);
-        pageText = txt.replace(/[^\x20-\x7E\n]+/g, " ").replace(/\s+/g, " ").slice(0, 24000);
+        pageText = txt.replace(/[^\x20-\x7E\n]+/g, " ").replace(/\s+/g, " ").slice(0, 200000);
       } else {
-        const html = await res.text();
-        pageText = html.replace(/<script[\s\S]*?<\/script>/gi, "").replace(/<style[\s\S]*?<\/style>/gi, "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 24000);
+        pageText = cleanHtmlToText(await res.text());
       }
     } catch { /* ignore */ }
 
-    const promptText = `You are extracting an EXHAUSTIVE list of individual ${data.type} postings from a Pakistani government / education advertisement${isImage ? " (image/scan of ad)" : isPdf ? " (PDF)" : " webpage"} at ${data.url}.
-
-RULES:
-- A single advertisement usually contains MANY separate posts (e.g. "Assistant Engineer", "Sub-Engineer", "Stenographer", "Clerk"). Return EACH post as its OWN item — do NOT merge.
-- Extract up to 50 items. Do not skip any listed post.
-- Per item capture: exact post title, department/organization, location, short description (<=300 chars) with BPS/scale, vacancies, qualification, age if present.
-- deadline as YYYY-MM-DD if visible else null. apply_url = official apply link if present else null.
-
-Return STRICT JSON only:
-{ "items": [ { "title": string, "organization": string, "location": string, "description": string, "deadline": "YYYY-MM-DD"|null, "apply_url": string|null } ] }${isImage ? "" : `\n\nContent:\n"""${pageText}"""`}`;
-
-    const userContent = isImage
-      ? [{ type: "text", text: promptText }, { type: "image_url", image_url: { url: imageDataUrl } }]
-      : promptText;
-
-    // Groq (agar GROQ_API_KEY set ho) warna Lovable AI. Dono OpenAI-compatible hain.
-    const groqKey = process.env.GROQ_API_KEY;
     const endpoint = groqKey
       ? "https://api.groq.com/openai/v1/chat/completions"
       : "https://ai.gateway.lovable.dev/v1/chat/completions";
     const model = groqKey
-      ? (isImage ? "meta-llama/llama-4-scout-17b-16e-instruct" : "llama-3.3-70b-versatile")
+      ? (kind === "image" ? "meta-llama/llama-4-scout-17b-16e-instruct" : "llama-3.3-70b-versatile")
       : "google/gemini-2.5-flash";
 
-    const resp = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${groqKey ?? apiKey}` },
-      body: JSON.stringify({
-        model,
-        messages: [{ role: "user", content: userContent }],
-        response_format: { type: "json_object" },
-      }),
-    });
+    const callAI = async (content: unknown) => {
+      const resp = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${groqKey ?? apiKey}` },
+        body: JSON.stringify({
+          model,
+          messages: [{ role: "user", content }],
+          response_format: { type: "json_object" },
+          max_tokens: 8000,
+          temperature: 0,
+        }),
+      });
+      if (!resp.ok) {
+        const err = await resp.text();
+        throw new Error(`AI extract failed: ${resp.status} ${err.slice(0, 200)}`);
+      }
+      const json = (await resp.json()) as { choices?: { message?: { content?: string } }[] };
+      return parseItems(json.choices?.[0]?.message?.content ?? "{}");
+    };
 
-
-    if (!resp.ok) {
-      const err = await resp.text();
-      throw new Error(`AI extract failed: ${resp.status} ${err.slice(0, 200)}`);
+    let items: ExtractItem[] = [];
+    if (kind === "image") {
+      items = await callAI([
+        { type: "text", text: buildPrompt({ type: data.type, url: data.url, kind }) },
+        { type: "image_url", image_url: { url: imageDataUrl } },
+      ]);
+    } else {
+      // Long listing pages (60+ posts) don't fit in one prompt — split and merge.
+      const chunks = chunkText(pageText);
+      const results = await Promise.all(
+        chunks.map((c, i) =>
+          callAI(buildPrompt({
+            type: data.type,
+            url: data.url,
+            kind,
+            content: c,
+            part: chunks.length > 1 ? { index: i + 1, total: chunks.length } : undefined,
+          })).catch(() => [] as ExtractItem[]),
+        ),
+      );
+      items = results.flat();
     }
-    const json = (await resp.json()) as { choices?: { message?: { content?: string } }[] };
-    const content = json.choices?.[0]?.message?.content ?? "{}";
-    type Item = { title?: string; organization?: string; location?: string; description?: string; deadline?: string | null; apply_url?: string | null };
-    let parsed: { items?: Item[] } = {};
-    try { parsed = JSON.parse(content) as { items?: Item[] }; } catch { parsed = { items: [] }; }
-    const items: Item[] = Array.isArray(parsed.items) ? parsed.items : [];
-    return { url: data.url, type: data.type, items };
+
+    return { url: data.url, type: data.type, items: dedupeItems(items) };
   });
+
