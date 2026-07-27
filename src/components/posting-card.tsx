@@ -43,17 +43,8 @@ export function PostingCard({ p }: { p: Posting }) {
 
   return (
     <article className="group relative flex flex-col rounded-2xl border bg-card overflow-hidden hover:shadow-lg hover:border-primary/30 transition-all">
-      {p.ad_image_url ? (
-        <a href={p.source_url || p.apply_url || "#"} target="_blank" rel="noreferrer" className="block aspect-[16/9] overflow-hidden bg-muted">
-          <img src={p.ad_image_url} alt={p.title} loading="lazy" className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
-        </a>
-      ) : (
-        <div className="aspect-[16/9] bg-gradient-to-br from-primary/10 via-primary/5 to-transparent grid place-items-center">
-          <Building2 className="h-12 w-12 text-primary/40" />
-        </div>
-      )}
+      <div className="p-4 sm:p-5 flex-1 flex flex-col">
 
-      <div className="p-5 flex-1 flex flex-col">
         <div className="flex items-center gap-2 mb-2">
           <Badge variant="outline" className={cn("border", style.className)}>{style.label}</Badge>
           {p.is_featured && (
