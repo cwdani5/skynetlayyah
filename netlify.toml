@@ -6,3 +6,7 @@
   NODE_VERSION = "22"
   NITRO_PRESET = "netlify"
   NPM_FLAGS = "--legacy-peer-deps"
+  # Publishable Supabase keys are safe in the client bundle; skip Netlify secret scanning for them.
+  SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_URL,VITE_SUPABASE_PUBLISHABLE_KEY,VITE_SUPABASE_PROJECT_ID,SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,SUPABASE_PROJECT_ID"
+  SECRETS_SCAN_OMIT_PATHS = ".env,dist/**"
+
