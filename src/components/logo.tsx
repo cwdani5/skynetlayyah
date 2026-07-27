@@ -1,11 +1,10 @@
 import { cn } from "@/lib/utils";
-import logoAsset from "@/assets/skynet-logo.png.asset.json";
 
 export function Logo({ className, size = 44, showText = true }: { className?: string; size?: number; showText?: boolean }) {
   return (
     <div className={cn("flex items-center gap-2.5 min-w-0", className)}>
       <img
-        src={logoAsset.url}
+        src="/skynet-logo.png"
         alt="Skynet Cafe & Photo Studio Layyah"
         width={size}
         height={size}
