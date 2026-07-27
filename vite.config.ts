@@ -28,6 +28,36 @@ export default defineConfig({
       "process.env.SUPABASE_PROJECT_ID": JSON.stringify(
         process.env.SUPABASE_PROJECT_ID ?? "xligygbkjeyhzspjgvxf",
       ),
+      "process.env.VITE_SUPABASE_URL": JSON.stringify(
+        process.env.VITE_SUPABASE_URL ??
+          process.env.SUPABASE_URL ??
+          "https://xligygbkjeyhzspjgvxf.supabase.co",
+      ),
+      "process.env.VITE_SUPABASE_PUBLISHABLE_KEY": JSON.stringify(
+        process.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
+          process.env.SUPABASE_PUBLISHABLE_KEY ??
+          "sb_publishable_u5htHETymwflFHKf1itbIQ_6SHk3RBj",
+      ),
+      "process.env.VITE_SUPABASE_PROJECT_ID": JSON.stringify(
+        process.env.VITE_SUPABASE_PROJECT_ID ??
+          process.env.SUPABASE_PROJECT_ID ??
+          "xligygbkjeyhzspjgvxf",
+      ),
+      "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(
+        process.env.VITE_SUPABASE_URL ??
+          process.env.SUPABASE_URL ??
+          "https://xligygbkjeyhzspjgvxf.supabase.co",
+      ),
+      "import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY": JSON.stringify(
+        process.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
+          process.env.SUPABASE_PUBLISHABLE_KEY ??
+          "sb_publishable_u5htHETymwflFHKf1itbIQ_6SHk3RBj",
+      ),
+      "import.meta.env.VITE_SUPABASE_PROJECT_ID": JSON.stringify(
+        process.env.VITE_SUPABASE_PROJECT_ID ??
+          process.env.SUPABASE_PROJECT_ID ??
+          "xligygbkjeyhzspjgvxf",
+      ),
     },
   },
 });

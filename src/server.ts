@@ -7,6 +7,28 @@ type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
 };
 
+const PUBLIC_BACKEND_FALLBACKS = {
+  SUPABASE_URL: "https://xligygbkjeyhzspjgvxf.supabase.co",
+  SUPABASE_PUBLISHABLE_KEY: "sb_publishable_u5htHETymwflFHKf1itbIQ_6SHk3RBj",
+  SUPABASE_PROJECT_ID: "xligygbkjeyhzspjgvxf",
+};
+
+function getEnvValue(env: unknown, key: string): string | undefined {
+  if (!env || typeof env !== "object") return undefined;
+  const value = (env as Record<string, unknown>)[key];
+  return typeof value === "string" && value.length > 0 ? value : undefined;
+}
+
+function ensurePublicBackendEnv(env: unknown) {
+  if (typeof process === "undefined") return;
+  process.env.SUPABASE_URL ||= getEnvValue(env, "SUPABASE_URL") ?? getEnvValue(env, "VITE_SUPABASE_URL") ?? PUBLIC_BACKEND_FALLBACKS.SUPABASE_URL;
+  process.env.SUPABASE_PUBLISHABLE_KEY ||= getEnvValue(env, "SUPABASE_PUBLISHABLE_KEY") ?? getEnvValue(env, "VITE_SUPABASE_PUBLISHABLE_KEY") ?? PUBLIC_BACKEND_FALLBACKS.SUPABASE_PUBLISHABLE_KEY;
+  process.env.SUPABASE_PROJECT_ID ||= getEnvValue(env, "SUPABASE_PROJECT_ID") ?? getEnvValue(env, "VITE_SUPABASE_PROJECT_ID") ?? PUBLIC_BACKEND_FALLBACKS.SUPABASE_PROJECT_ID;
+  process.env.VITE_SUPABASE_URL ||= process.env.SUPABASE_URL;
+  process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||= process.env.SUPABASE_PUBLISHABLE_KEY;
+  process.env.VITE_SUPABASE_PROJECT_ID ||= process.env.SUPABASE_PROJECT_ID;
+}
+
 let serverEntryPromise: Promise<ServerEntry> | undefined;
 
 async function getServerEntry(): Promise<ServerEntry> {
@@ -47,6 +69,7 @@ function isH3SwallowedErrorBody(body: string): boolean {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      ensurePublicBackendEnv(env);
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
