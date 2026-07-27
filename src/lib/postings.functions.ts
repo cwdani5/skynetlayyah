@@ -34,24 +34,22 @@ export const countPostings = createServerFn({ method: "GET" })
     return out as { job: number; admission: number; scheme: number };
   });
 
-const PostingInput = z.object({
-  id: z.string().uuid().optional(),
-  type: z.enum(["job", "admission", "scheme"]),
-  title: z.string().min(3).max(300),
-  organization: z.string().max(200).optional().nullable(),
-  location: z.string().max(200).optional().nullable(),
-  description: z.string().max(4000).optional().nullable(),
-  deadline: z.string().optional().nullable(),
-  source_url: z.string().url().optional().nullable().or(z.literal("")),
-  ad_image_url: z.string().url().optional().nullable().or(z.literal("")),
-  apply_url: z.string().url().optional().nullable().or(z.literal("")),
-  is_featured: z.boolean().optional(),
-  is_active: z.boolean().optional(),
-});
-
 export const upsertPosting = createServerFn({ method: "POST" })
   .middleware([requireSkynetAuth])
-  .inputValidator((input: unknown) => PostingInput.parse(input))
+  .inputValidator((input: unknown) => z.object({
+    id: z.string().uuid().optional(),
+    type: z.enum(["job", "admission", "scheme"]),
+    title: z.string().min(3).max(300),
+    organization: z.string().max(200).optional().nullable(),
+    location: z.string().max(200).optional().nullable(),
+    description: z.string().max(4000).optional().nullable(),
+    deadline: z.string().optional().nullable(),
+    source_url: z.string().url().optional().nullable().or(z.literal("")),
+    ad_image_url: z.string().url().optional().nullable().or(z.literal("")),
+    apply_url: z.string().url().optional().nullable().or(z.literal("")),
+    is_featured: z.boolean().optional(),
+    is_active: z.boolean().optional(),
+  }).parse(input))
   .handler(async ({ data, context }) => {
     await assertAdmin({ supabase: context.supabase, userId: context.userId });
     const payload = {
