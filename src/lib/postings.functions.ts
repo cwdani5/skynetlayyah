@@ -120,7 +120,8 @@ export const extractFromUrl = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin(context as never);
     const apiKey = process.env.LOVABLE_API_KEY;
-    if (!apiKey) throw new Error("AI service not configured");
+    if (!apiKey && !process.env.GROQ_API_KEY) throw new Error("AI service not configured");
+
 
     let pageText = "";
     let isPdf = false;
