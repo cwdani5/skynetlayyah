@@ -1,35 +1,16 @@
 import { createServerFn } from "@tanstack/react-start";
-import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import type { Database } from "@/integrations/supabase/types";
-
-function isNewKey(v: string) { return v.startsWith("sb_publishable_") || v.startsWith("sb_secret_"); }
-function serverPublic() {
-  // Netlify/self-host: server env vars may be missing, fall back to the
-  // build-time inlined publishable values (safe, public keys).
-  const url = process.env.SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  if (!url || !key) throw new Error("Supabase env missing: set SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY");
-
-  return createClient<Database>(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false, storage: undefined },
-    global: { fetch: (input, init) => {
-      const h = new Headers(init?.headers);
-      if (isNewKey(key) && h.get("Authorization") === `Bearer ${key}`) h.delete("Authorization");
-      h.set("apikey", key);
-      return fetch(input, { ...init, headers: h });
-    } },
-  });
-}
-
-const TypeSchema = z.enum(["job", "admission", "scheme"]).optional();
+import { requireSkynetAuth } from "@/lib/skynet-auth";
+import { assertAdmin, createPublicBackendClient } from "@/lib/backend-env";
 
 export const listPostings = createServerFn({ method: "GET" })
-  .inputValidator((input: { type?: "job" | "admission" | "scheme"; limit?: number } | undefined) =>
-    z.object({ type: TypeSchema, limit: z.number().min(1).max(100).optional() }).parse(input ?? {}))
+  .inputValidator((input: unknown) =>
+    z.object({
+      type: z.enum(["job", "admission", "scheme"]).optional(),
+      limit: z.number().min(1).max(100).optional(),
+    }).parse(input ?? {}))
   .handler(async ({ data }) => {
-    const sb = serverPublic();
+    const sb = createPublicBackendClient();
     const today = new Date().toISOString().slice(0, 10);
     let q = sb.from("postings").select("*").eq("is_active", true).or(`deadline.is.null,deadline.gte.${today}`).order("is_featured", { ascending: false }).order("created_at", { ascending: false });
     if (data.type) q = q.eq("type", data.type);
@@ -41,7 +22,7 @@ export const listPostings = createServerFn({ method: "GET" })
 
 export const countPostings = createServerFn({ method: "GET" })
   .handler(async () => {
-    const sb = serverPublic();
+    const sb = createPublicBackendClient();
     const today = new Date().toISOString().slice(0, 10);
     const types = ["job", "admission", "scheme"] as const;
     const out: Record<string, number> = { job: 0, admission: 0, scheme: 0 };
@@ -68,17 +49,11 @@ const PostingInput = z.object({
   is_active: z.boolean().optional(),
 });
 
-async function assertAdmin(ctx: { supabase: ReturnType<typeof serverPublic>; userId: string }) {
-  const { data, error } = await ctx.supabase.from("user_roles").select("role").eq("user_id", ctx.userId).eq("role", "admin").maybeSingle();
-  if (error) throw new Error(error.message);
-  if (!data) throw new Error("Forbidden: admin role required");
-}
-
 export const upsertPosting = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSkynetAuth])
   .inputValidator((input: unknown) => PostingInput.parse(input))
   .handler(async ({ data, context }) => {
-    await assertAdmin(context as never);
+    await assertAdmin({ supabase: context.supabase, userId: context.userId });
     const payload = {
       ...data,
       source_url: data.source_url || null,
@@ -95,30 +70,28 @@ export const upsertPosting = createServerFn({ method: "POST" })
   });
 
 export const deletePosting = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSkynetAuth])
   .inputValidator((input: { id: string }) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
-    await assertAdmin(context as never);
+    await assertAdmin({ supabase: context.supabase, userId: context.userId });
     const { error } = await context.supabase.from("postings").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
 
 export const isCurrentUserAdmin = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSkynetAuth])
   .handler(async ({ context }) => {
     const { data } = await context.supabase.from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
     return { isAdmin: !!data };
   });
 
 // AI-assisted extraction from an official webpage
-const ExtractSchema = z.object({ url: z.string().url(), type: z.enum(["job", "admission", "scheme"]) });
-
 export const extractFromUrl = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => ExtractSchema.parse(input))
+  .middleware([requireSkynetAuth])
+  .inputValidator((input: unknown) => z.object({ url: z.string().url(), type: z.enum(["job", "admission", "scheme"]) }).parse(input))
   .handler(async ({ data, context }) => {
-    await assertAdmin(context as never);
+    await assertAdmin({ supabase: context.supabase, userId: context.userId });
     const apiKey = process.env.LOVABLE_API_KEY;
     if (!apiKey && !process.env.GROQ_API_KEY) throw new Error("AI service not configured");
 
