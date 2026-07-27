@@ -15,5 +15,19 @@ export default defineConfig({
   },
   vite: {
     plugins: [mcpPlugin()],
+    // Public (publishable) Supabase values hard-inlined so the app never breaks
+    // on hosts where env vars aren't wired (e.g. Netlify runtime).
+    define: {
+      "process.env.SUPABASE_URL": JSON.stringify(
+        process.env.SUPABASE_URL ?? "https://xligygbkjeyhzspjgvxf.supabase.co",
+      ),
+      "process.env.SUPABASE_PUBLISHABLE_KEY": JSON.stringify(
+        process.env.SUPABASE_PUBLISHABLE_KEY ??
+          "sb_publishable_u5htHETymwflFHKf1itbIQ_6SHk3RBj",
+      ),
+      "process.env.SUPABASE_PROJECT_ID": JSON.stringify(
+        process.env.SUPABASE_PROJECT_ID ?? "xligygbkjeyhzspjgvxf",
+      ),
+    },
   },
 });
