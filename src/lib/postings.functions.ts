@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSkynetAuth } from "@/lib/skynet-auth";
 import { assertAdmin, createPublicBackendClient } from "@/lib/backend-env";
+import { buildPrompt, chunkText, cleanHtmlToText, dedupeItems, parseItems, type ExtractItem } from "@/lib/ai-extract";
 
 export const listPostings = createServerFn({ method: "GET" })
   .inputValidator((input: unknown) =>
