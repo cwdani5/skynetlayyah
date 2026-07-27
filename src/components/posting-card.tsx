@@ -70,7 +70,7 @@ export function PostingCard({ p }: { p: Posting }) {
 
         <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
           {p.location && <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {p.location}</span>}
-          {p.deadline && <span className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" /> Deadline: {new Date(p.deadline).toLocaleDateString()}</span>}
+          {p.deadline && <span className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" /> Deadline: {fmtDate(p.deadline)}</span>}
         </div>
 
         <div className="mt-5 flex items-center gap-2 pt-4 border-t">
