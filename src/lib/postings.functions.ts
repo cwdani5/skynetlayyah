@@ -60,9 +60,30 @@ export const upsertPosting = createServerFn({ method: "POST" })
       deadline: data.deadline || null,
       created_by: context.userId,
     };
-    const { data: row, error } = data.id
-      ? await context.supabase.from("postings").update(payload).eq("id", data.id).select().single()
-      : await context.supabase.from("postings").insert(payload).select().single();
+    if (data.id) {
+      const { data: row, error } = await context.supabase.from("postings").update(payload).eq("id", data.id).select().single();
+      if (error) throw new Error(error.message);
+      return row;
+    }
+
+    // Duplicate guard: same type + title (+ organization) => update existing instead of adding again
+    let dupQuery = context.supabase
+      .from("postings")
+      .select("id")
+      .eq("type", data.type)
+      .ilike("title", data.title.trim());
+    dupQuery = data.organization?.trim()
+      ? dupQuery.ilike("organization", data.organization.trim())
+      : dupQuery.or("organization.is.null,organization.eq.");
+    const { data: existing } = await dupQuery.limit(1).maybeSingle();
+
+    if (existing?.id) {
+      const { data: row, error } = await context.supabase.from("postings").update(payload).eq("id", existing.id).select().single();
+      if (error) throw new Error(error.message);
+      return row;
+    }
+
+    const { data: row, error } = await context.supabase.from("postings").insert(payload).select().single();
     if (error) throw new Error(error.message);
     return row;
   });
