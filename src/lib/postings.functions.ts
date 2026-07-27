@@ -120,7 +120,8 @@ export const extractFromUrl = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin(context as never);
     const apiKey = process.env.LOVABLE_API_KEY;
-    if (!apiKey) throw new Error("AI service not configured");
+    if (!apiKey && !process.env.GROQ_API_KEY) throw new Error("AI service not configured");
+
 
     let pageText = "";
     let isPdf = false;
@@ -164,15 +165,25 @@ Return STRICT JSON only:
       ? [{ type: "text", text: promptText }, { type: "image_url", image_url: { url: imageDataUrl } }]
       : promptText;
 
-    const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    // Groq (agar GROQ_API_KEY set ho) warna Lovable AI. Dono OpenAI-compatible hain.
+    const groqKey = process.env.GROQ_API_KEY;
+    const endpoint = groqKey
+      ? "https://api.groq.com/openai/v1/chat/completions"
+      : "https://ai.gateway.lovable.dev/v1/chat/completions";
+    const model = groqKey
+      ? (isImage ? "meta-llama/llama-4-scout-17b-16e-instruct" : "llama-3.3-70b-versatile")
+      : "google/gemini-2.5-flash";
+
+    const resp = await fetch(endpoint, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${groqKey ?? apiKey}` },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model,
         messages: [{ role: "user", content: userContent }],
         response_format: { type: "json_object" },
       }),
     });
+
 
     if (!resp.ok) {
       const err = await resp.text();
