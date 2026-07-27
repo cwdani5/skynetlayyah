@@ -43,6 +43,22 @@ export function PostingCard({ p }: { p: Posting }) {
 
   return (
     <article className="group relative flex flex-col rounded-2xl border bg-card overflow-hidden hover:shadow-lg hover:border-primary/30 transition-all">
+      {/* Text-only fallback banner (no external images = no bandwidth/credits) */}
+      <div className="relative border-b bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10 px-4 py-5 sm:px-5 sm:py-6">
+        <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary/80">
+          {style.label}
+        </div>
+        <div className="mt-1.5 text-sm sm:text-base font-bold leading-snug line-clamp-2 text-foreground">
+          {p.organization || p.title}
+        </div>
+        {p.organization && (
+          <div className="mt-0.5 text-xs text-muted-foreground line-clamp-1">{p.title}</div>
+        )}
+        <div className="mt-2 text-[11px] sm:text-xs font-medium text-muted-foreground">
+          Last Date: <span className="text-foreground">{p.deadline ? fmtDate(p.deadline) : "Open / N/A"}</span>
+        </div>
+      </div>
+
       <div className="p-4 sm:p-5 flex-1 flex flex-col">
 
         <div className="flex items-center gap-2 mb-2">
