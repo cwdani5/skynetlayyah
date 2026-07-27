@@ -25,10 +25,20 @@ const typeStyles: Record<Posting["type"], { label: string; className: string }> 
   scheme: { label: "Scheme", className: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20" },
 };
 
+function fmtDate(d: string) {
+  // Locale-independent so server & client HTML match (no hydration mismatch).
+  const dt = new Date(d);
+  if (Number.isNaN(dt.getTime())) return d;
+  const dd = String(dt.getUTCDate()).padStart(2, "0");
+  const mm = String(dt.getUTCMonth() + 1).padStart(2, "0");
+  return `${dd}/${mm}/${dt.getUTCFullYear()}`;
+}
+
 export function PostingCard({ p }: { p: Posting }) {
   const style = typeStyles[p.type];
   const daysLeft = p.deadline ? Math.ceil((new Date(p.deadline).getTime() - Date.now()) / 86400000) : null;
-  const askMsg = `Assalamualaikum Skynet,\n\nMujhe is ${style.label.toLowerCase()} ke baare mein maloomat chahiye:\n\n• ${p.title}${p.organization ? `\n• Idara: ${p.organization}` : ""}${p.location ? `\n• Location: ${p.location}` : ""}${p.deadline ? `\n• Deadline: ${new Date(p.deadline).toLocaleDateString()}` : ""}${p.apply_url ? `\n• Link: ${p.apply_url}` : p.source_url ? `\n• Link: ${p.source_url}` : ""}\n\nApply/form fill karne mein madad chahiye. Shukriya!`;
+  const askMsg = `Assalamualaikum Skynet,\n\nMujhe is ${style.label.toLowerCase()} ke baare mein maloomat chahiye:\n\n• ${p.title}${p.organization ? `\n• Idara: ${p.organization}` : ""}${p.location ? `\n• Location: ${p.location}` : ""}${p.deadline ? `\n• Deadline: ${fmtDate(p.deadline)}` : ""}${p.apply_url ? `\n• Link: ${p.apply_url}` : p.source_url ? `\n• Link: ${p.source_url}` : ""}\n\nApply/form fill karne mein madad chahiye. Shukriya!`;
+
   const askHref = `https://wa.me/923026760999?text=${encodeURIComponent(askMsg)}`;
 
   return (
