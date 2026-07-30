@@ -114,7 +114,10 @@ export const extractFromUrl = createServerFn({ method: "POST" })
     await assertAdmin({ supabase: context.supabase, userId: context.userId });
     const apiKey = process.env.LOVABLE_API_KEY;
     const groqKey = process.env.GROQ_API_KEY;
-    if (!apiKey && !groqKey) throw new Error("AI service not configured");
+    if (!apiKey && !groqKey)
+      throw new Error(
+        "AI service not configured: set GROQ_API_KEY (or LOVABLE_API_KEY) in your hosting environment variables (Netlify → Site settings → Environment variables), then redeploy.",
+      );
 
     let pageText = "";
     let kind: "image" | "pdf" | "web" = "web";
