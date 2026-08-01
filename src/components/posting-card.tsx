@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Building2, ExternalLink, Sparkles } from "lucide-react";
+import { Calendar, MapPin, Building2, MessageCircle, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type Posting = {
@@ -37,7 +37,7 @@ function fmtDate(d: string) {
 export function PostingCard({ p }: { p: Posting }) {
   const style = typeStyles[p.type];
   const daysLeft = p.deadline ? Math.ceil((new Date(p.deadline).getTime() - Date.now()) / 86400000) : null;
-  const askMsg = `Assalamualaikum Skynet,\n\nMujhe is ${style.label.toLowerCase()} ke baare mein maloomat chahiye:\n\n• ${p.title}${p.organization ? `\n• Idara: ${p.organization}` : ""}${p.location ? `\n• Location: ${p.location}` : ""}${p.deadline ? `\n• Deadline: ${fmtDate(p.deadline)}` : ""}${p.apply_url ? `\n• Link: ${p.apply_url}` : p.source_url ? `\n• Link: ${p.source_url}` : ""}\n\nApply/form fill karne mein madad chahiye. Shukriya!`;
+  const askMsg = `Assalamualaikum Skynet,\n\nMain is ${style.label.toLowerCase()} ke liye apply karna chahta/chahti hoon:\n\n• ${p.title}${p.organization ? `\n• Idara: ${p.organization}` : ""}${p.location ? `\n• Location: ${p.location}` : ""}${p.deadline ? `\n• Last Date: ${fmtDate(p.deadline)}` : ""}${p.apply_url ? `\n• Link: ${p.apply_url}` : p.source_url ? `\n• Link: ${p.source_url}` : ""}\n\nApply / form fill karne mein madad chahiye. Shukriya!`;
 
   const askHref = `https://wa.me/923026760999?text=${encodeURIComponent(askMsg)}`;
 
@@ -80,14 +80,11 @@ export function PostingCard({ p }: { p: Posting }) {
           {p.deadline && <span className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" /> Deadline: {fmtDate(p.deadline)}</span>}
         </div>
 
-        <div className="mt-5 flex items-center gap-2 pt-4 border-t">
-          {p.apply_url && (
-            <a href={p.apply_url} target="_blank" rel="noreferrer" className="flex-1">
-              <Button size="sm" className="w-full gap-1.5">Apply / Details <ExternalLink className="h-3.5 w-3.5" /></Button>
-            </a>
-          )}
-          <a href={askHref} target="_blank" rel="noreferrer">
-            <Button size="sm" variant="outline">Ask Skynet</Button>
+        <div className="mt-5 pt-4 border-t">
+          <a href={askHref} target="_blank" rel="noreferrer" className="block">
+            <Button size="sm" className="w-full gap-1.5">
+              <MessageCircle className="h-3.5 w-3.5" /> Apply Now
+            </Button>
           </a>
         </div>
       </div>
