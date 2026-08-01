@@ -54,6 +54,7 @@ function AdminPage() {
   const deleteFn = useServerFn(deletePosting);
   const adminCheckFn = useServerFn(isCurrentUserAdmin);
   const extractFn = useServerFn(extractFromUrl);
+  const extractTextFn = useServerFn(extractFromText);
   const aiStatusFn = useServerFn(getAiSettingsStatus);
   const testAiFn = useServerFn(testAiConnection);
 
