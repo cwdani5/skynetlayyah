@@ -72,6 +72,41 @@ function AdminPage() {
   const [fetchResults, setFetchResults] = useState<Array<{ title?: string; organization?: string; location?: string; description?: string; deadline?: string | null; apply_url?: string | null }>>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [testingAi, setTestingAi] = useState(false);
+  const [aiKeyInput, setAiKeyInput] = useState("");
+  const [savingKey, setSavingKey] = useState(false);
+
+  const saveAiKeyFn = useServerFn(saveAiKey);
+  const clearAiKeyFn = useServerFn(clearAiKey);
+
+  const saveAiKeyHandler = async () => {
+    setSavingKey(true);
+    try {
+      const res = await saveAiKeyFn({ data: { key: aiKeyInput.trim() } });
+      if (res.ok) {
+        toast.success(res.message);
+        setAiKeyInput("");
+        aiStatusQ.refetch();
+      } else toast.error(res.message);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Key save nahi hui");
+    } finally {
+      setSavingKey(false);
+    }
+  };
+
+  const clearAiKeyHandler = async () => {
+    setSavingKey(true);
+    try {
+      const res = await clearAiKeyFn();
+      if (res.ok) { toast.success(res.message); aiStatusQ.refetch(); }
+      else toast.error(res.message);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Key remove nahi hui");
+    } finally {
+      setSavingKey(false);
+    }
+  };
+
 
   useEffect(() => {
     if (adminQ.data && !adminQ.data.isAdmin) toast.warning("Aapke pass admin role nahi hai. Sirf view mode.");
