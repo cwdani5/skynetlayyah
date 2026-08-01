@@ -181,6 +181,84 @@ export const testAiConnection = createServerFn({ method: "POST" })
     return { ok: true, message: "Groq connection is working." };
   });
 
+const BROWSER_HEADERS = {
+  "User-Agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+  Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+  "Accept-Language": "en-US,en;q=0.9",
+  "Upgrade-Insecure-Requests": "1",
+};
+
+function looksBlocked(text: string) {
+  const t = text.slice(0, 4000).toLowerCase();
+  return (
+    t.includes("you have been blocked") ||
+    t.includes("attention required! | cloudflare") ||
+    t.includes("enable javascript and cookies to continue") ||
+    t.includes("just a moment...") ||
+    t.includes("access denied")
+  );
+}
+
+type Fetched = { kind: "image" | "pdf" | "web"; pageText: string; imageDataUrl: string; blocked: boolean };
+
+async function fetchSource(url: string): Promise<Fetched> {
+  const out: Fetched = { kind: "web", pageText: "", imageDataUrl: "", blocked: false };
+  const lower = url.toLowerCase();
+
+  const tryDirect = async (target: string, headers: Record<string, string>) => {
+    const res = await fetch(target, { headers, redirect: "follow" });
+    const ct = res.headers.get("content-type") ?? "";
+    const looksImage = ct.startsWith("image/") || /\.(png|jpe?g|webp|gif|bmp)(\?|$)/.test(lower);
+    if (looksImage) {
+      const buf = new Uint8Array(await res.arrayBuffer());
+      let bin = ""; for (let i = 0; i < buf.length; i++) bin += String.fromCharCode(buf[i]!);
+      out.kind = "image";
+      out.imageDataUrl = `data:${ct.startsWith("image/") ? ct.split(";")[0] : "image/jpeg"};base64,${btoa(bin)}`;
+      return true;
+    }
+    if (ct.includes("pdf") || lower.endsWith(".pdf")) {
+      const buf = new Uint8Array(await res.arrayBuffer());
+      const txt = new TextDecoder("latin1").decode(buf);
+      out.kind = "pdf";
+      out.pageText = txt.replace(/[^\x20-\x7E\n]+/g, " ").replace(/\s+/g, " ").slice(0, 200000);
+      return out.pageText.replace(/\s/g, "").length > 200;
+    }
+    const html = await res.text();
+    if (!res.ok || looksBlocked(html)) return false;
+    out.kind = "web";
+    out.pageText = cleanHtmlToText(html);
+    return out.pageText.replace(/\s/g, "").length > 200;
+  };
+
+  // 1) direct with browser-like headers
+  try { if (await tryDirect(url, BROWSER_HEADERS)) return out; } catch { /* continue */ }
+
+  // 2) reader/proxy fallbacks for Cloudflare-protected or JS-rendered pages
+  const fallbacks = [
+    `https://r.jina.ai/${url}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+  ];
+  for (const f of fallbacks) {
+    try {
+      const res = await fetch(f, { headers: { "User-Agent": BROWSER_HEADERS["User-Agent"] } });
+      if (!res.ok) continue;
+      const body = await res.text();
+      if (looksBlocked(body)) continue;
+      const text = body.trimStart().startsWith("<") ? cleanHtmlToText(body) : body;
+      if (text.replace(/\s/g, "").length > 200) {
+        out.kind = "web";
+        out.pageText = text.slice(0, 300000);
+        return out;
+      }
+    } catch { /* try next */ }
+  }
+
+  out.blocked = true;
+  return out;
+}
+
 // AI-assisted extraction from an official webpage
 export const extractFromUrl = createServerFn({ method: "POST" })
   .middleware([requireSkynetAuth])
@@ -194,30 +272,14 @@ export const extractFromUrl = createServerFn({ method: "POST" })
         "AI key set nahi hai. Admin Panel → AI Settings mein apni Groq key paste karke Save karein.",
       );
 
-    let pageText = "";
-    let kind: "image" | "pdf" | "web" = "web";
-    let imageDataUrl = "";
-    try {
-      const res = await fetch(data.url, { headers: { "User-Agent": "Mozilla/5.0 SkynetBot" } });
-      const ct = res.headers.get("content-type") ?? "";
-      const lower = data.url.toLowerCase();
-      const looksImage = ct.startsWith("image/") || /\.(png|jpe?g|webp|gif|bmp)(\?|$)/.test(lower);
-      if (looksImage) {
-        kind = "image";
-        const buf = new Uint8Array(await res.arrayBuffer());
-        let bin = ""; for (let i = 0; i < buf.length; i++) bin += String.fromCharCode(buf[i]);
-        const b64 = btoa(bin);
-        const mime = ct.startsWith("image/") ? ct.split(";")[0] : "image/jpeg";
-        imageDataUrl = `data:${mime};base64,${b64}`;
-      } else if (ct.includes("pdf") || lower.endsWith(".pdf")) {
-        kind = "pdf";
-        const buf = new Uint8Array(await res.arrayBuffer());
-        const txt = new TextDecoder("latin1").decode(buf);
-        pageText = txt.replace(/[^\x20-\x7E\n]+/g, " ").replace(/\s+/g, " ").slice(0, 200000);
-      } else {
-        pageText = cleanHtmlToText(await res.text());
-      }
-    } catch { /* ignore */ }
+    const fetched = await fetchSource(data.url);
+    const { kind, pageText, imageDataUrl } = fetched;
+    if (fetched.blocked || (kind !== "image" && pageText.replace(/\s/g, "").length < 200)) {
+      throw new Error(
+        "Yeh website apne server se content nahi deti (Cloudflare/robot protection ya JavaScript-only page). Ad ka PDF/image URL dein, ya 'Paste text' tab mein page ka text copy-paste kar dein — sab posts extract ho jayengi.",
+      );
+    }
+
 
     const endpoint = groqKey
       ? "https://api.groq.com/openai/v1/chat/completions"
@@ -274,3 +336,58 @@ export const extractFromUrl = createServerFn({ method: "POST" })
     return { url: data.url, type: data.type, items: dedupeItems(items) };
   });
 
+// AI extraction from raw text pasted by the admin (for sites that block server fetch)
+export const extractFromText = createServerFn({ method: "POST" })
+  .middleware([requireSkynetAuth])
+  .inputValidator((input: unknown) =>
+    z.object({
+      text: z.string().min(30).max(400000),
+      type: z.enum(["job", "admission", "scheme"]),
+      source_url: z.string().url().optional().or(z.literal("")),
+    }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin({ supabase: context.supabase, userId: context.userId });
+    const apiKey = process.env["LOVABLE_API_KEY"];
+    const groqKey = await resolveGroqKey(context.supabase);
+    if (!apiKey && !groqKey)
+      throw new Error("AI key set nahi hai. Admin Panel → AI Settings mein apni Groq key paste karke Save karein.");
+
+    const endpoint = groqKey
+      ? "https://api.groq.com/openai/v1/chat/completions"
+      : "https://ai.gateway.lovable.dev/v1/chat/completions";
+    const model = groqKey ? "llama-3.3-70b-versatile" : "google/gemini-2.5-flash";
+    const url = data.source_url || "pasted-content";
+
+    const callAI = async (content: unknown) => {
+      const resp = await fetch(endpoint, {
+        method: "POST",
+        headers: groqKey
+          ? { "Content-Type": "application/json", Authorization: `Bearer ${groqKey}` }
+          : { "Content-Type": "application/json", "Lovable-API-Key": apiKey ?? "" },
+        body: JSON.stringify({
+          model,
+          messages: [{ role: "user", content }],
+          response_format: { type: "json_object" },
+          max_tokens: 8000,
+          temperature: 0,
+        }),
+      });
+      if (!resp.ok) throw new Error(`AI extract failed: ${resp.status} ${(await resp.text()).slice(0, 200)}`);
+      const json = (await resp.json()) as { choices?: { message?: { content?: string } }[] };
+      return parseItems(json.choices?.[0]?.message?.content ?? "{}");
+    };
+
+    const chunks = chunkText(data.text);
+    const results = await Promise.all(
+      chunks.map((c, i) =>
+        callAI(buildPrompt({
+          type: data.type,
+          url,
+          kind: "web",
+          content: c,
+          part: chunks.length > 1 ? { index: i + 1, total: chunks.length } : undefined,
+        })).catch(() => [] as ExtractItem[]),
+      ),
+    );
+    return { url: data.source_url || "", type: data.type, items: dedupeItems(results.flat()) };
+  });
