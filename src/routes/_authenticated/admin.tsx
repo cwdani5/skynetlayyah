@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
-import { listPostings, upsertPosting, deletePosting, isCurrentUserAdmin, extractFromUrl, getAiSettingsStatus, testAiConnection } from "@/lib/postings.functions";
+import { listPostings, upsertPosting, deletePosting, isCurrentUserAdmin, extractFromUrl, getAiSettingsStatus, testAiConnection, saveAiKey, clearAiKey } from "@/lib/postings.functions";
 import type { Posting } from "@/components/posting-card";
 import { toast } from "sonner";
 import { Plus, Trash2, Pencil, LogOut, Sparkles, ExternalLink, ShieldAlert, RefreshCw, Settings, KeyRound } from "lucide-react";
