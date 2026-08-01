@@ -336,3 +336,58 @@ export const extractFromUrl = createServerFn({ method: "POST" })
     return { url: data.url, type: data.type, items: dedupeItems(items) };
   });
 
+// AI extraction from raw text pasted by the admin (for sites that block server fetch)
+export const extractFromText = createServerFn({ method: "POST" })
+  .middleware([requireSkynetAuth])
+  .inputValidator((input: unknown) =>
+    z.object({
+      text: z.string().min(30).max(400000),
+      type: z.enum(["job", "admission", "scheme"]),
+      source_url: z.string().url().optional().or(z.literal("")),
+    }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin({ supabase: context.supabase, userId: context.userId });
+    const apiKey = process.env["LOVABLE_API_KEY"];
+    const groqKey = await resolveGroqKey(context.supabase);
+    if (!apiKey && !groqKey)
+      throw new Error("AI key set nahi hai. Admin Panel → AI Settings mein apni Groq key paste karke Save karein.");
+
+    const endpoint = groqKey
+      ? "https://api.groq.com/openai/v1/chat/completions"
+      : "https://ai.gateway.lovable.dev/v1/chat/completions";
+    const model = groqKey ? "llama-3.3-70b-versatile" : "google/gemini-2.5-flash";
+    const url = data.source_url || "pasted-content";
+
+    const callAI = async (content: unknown) => {
+      const resp = await fetch(endpoint, {
+        method: "POST",
+        headers: groqKey
+          ? { "Content-Type": "application/json", Authorization: `Bearer ${groqKey}` }
+          : { "Content-Type": "application/json", "Lovable-API-Key": apiKey ?? "" },
+        body: JSON.stringify({
+          model,
+          messages: [{ role: "user", content }],
+          response_format: { type: "json_object" },
+          max_tokens: 8000,
+          temperature: 0,
+        }),
+      });
+      if (!resp.ok) throw new Error(`AI extract failed: ${resp.status} ${(await resp.text()).slice(0, 200)}`);
+      const json = (await resp.json()) as { choices?: { message?: { content?: string } }[] };
+      return parseItems(json.choices?.[0]?.message?.content ?? "{}");
+    };
+
+    const chunks = chunkText(data.text);
+    const results = await Promise.all(
+      chunks.map((c, i) =>
+        callAI(buildPrompt({
+          type: data.type,
+          url,
+          kind: "web",
+          content: c,
+          part: chunks.length > 1 ? { index: i + 1, total: chunks.length } : undefined,
+        })).catch(() => [] as ExtractItem[]),
+      ),
+    );
+    return { url: data.source_url || "", type: data.type, items: dedupeItems(results.flat()) };
+  });
