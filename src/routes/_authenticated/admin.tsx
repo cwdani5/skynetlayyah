@@ -176,6 +176,17 @@ function AdminPage() {
     finally { setFetchLoading(false); }
   };
 
+  const runPasteFetch = async () => {
+    setFetchLoading(true); setFetchResults([]);
+    try {
+      const res = await extractTextFn({ data: { text: pasteText, type: fetchType, source_url: fetchUrl || "" } });
+      setFetchResults(res.items as never);
+      toast.success(`${res.items.length} items extracted`);
+    } catch (e) { toast.error(e instanceof Error ? e.message : "Extract failed"); }
+    finally { setFetchLoading(false); }
+  };
+
+
   const importItem = async (item: { title?: string; organization?: string; location?: string; description?: string; deadline?: string | null; apply_url?: string | null }) => {
     try {
       await upsertFn({ data: {
