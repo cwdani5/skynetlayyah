@@ -82,8 +82,8 @@ export function PostingCard({ p }: { p: Posting }) {
 
         <div className="mt-5 pt-4 border-t">
           <a href={askHref} target="_blank" rel="noreferrer" className="block">
-            <Button size="sm" className="w-full gap-1.5">
-              <MessageCircle className="h-3.5 w-3.5" /> Apply Now
+            <Button size="default" className="w-full gap-2 bg-primary text-primary-foreground font-semibold shadow-md hover:bg-primary/90">
+              <MessageCircle className="h-4 w-4" /> Apply Now
             </Button>
           </a>
         </div>
