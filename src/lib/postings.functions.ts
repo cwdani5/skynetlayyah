@@ -106,14 +106,40 @@ export const isCurrentUserAdmin = createServerFn({ method: "GET" })
     return { isAdmin: !!data };
   });
 
+export const getAiSettingsStatus = createServerFn({ method: "GET" })
+  .middleware([requireSkynetAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin({ supabase: context.supabase, userId: context.userId });
+    return {
+      provider: process.env["GROQ_API_KEY"] ? "Groq" : process.env["LOVABLE_API_KEY"] ? "Lovable AI" : null,
+      configured: Boolean(process.env["GROQ_API_KEY"] || process.env["LOVABLE_API_KEY"]),
+      groqConfigured: Boolean(process.env["GROQ_API_KEY"]),
+    };
+  });
+
+export const testAiConnection = createServerFn({ method: "POST" })
+  .middleware([requireSkynetAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin({ supabase: context.supabase, userId: context.userId });
+    const groqKey = process.env["GROQ_API_KEY"];
+    if (!groqKey) return { ok: false, message: "GROQ_API_KEY is not set on this deployment." };
+    const response = await fetch("https://api.groq.com/openai/v1/models", {
+      headers: { Authorization: `Bearer ${groqKey}` },
+    });
+    if (!response.ok) {
+      return { ok: false, message: `Groq rejected the key (${response.status}).` };
+    }
+    return { ok: true, message: "Groq connection is working." };
+  });
+
 // AI-assisted extraction from an official webpage
 export const extractFromUrl = createServerFn({ method: "POST" })
   .middleware([requireSkynetAuth])
   .inputValidator((input: unknown) => z.object({ url: z.string().url(), type: z.enum(["job", "admission", "scheme"]) }).parse(input))
   .handler(async ({ data, context }) => {
     await assertAdmin({ supabase: context.supabase, userId: context.userId });
-    const apiKey = process.env.LOVABLE_API_KEY;
-    const groqKey = process.env.GROQ_API_KEY;
+    const apiKey = process.env["LOVABLE_API_KEY"];
+    const groqKey = process.env["GROQ_API_KEY"];
     if (!apiKey && !groqKey)
       throw new Error(
         "AI service not configured: set GROQ_API_KEY (or LOVABLE_API_KEY) in your hosting environment variables (Netlify → Site settings → Environment variables), then redeploy.",
@@ -154,7 +180,9 @@ export const extractFromUrl = createServerFn({ method: "POST" })
     const callAI = async (content: unknown) => {
       const resp = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${groqKey ?? apiKey}` },
+        headers: groqKey
+          ? { "Content-Type": "application/json", Authorization: `Bearer ${groqKey}` }
+          : { "Content-Type": "application/json", "Lovable-API-Key": apiKey ?? "" },
         body: JSON.stringify({
           model,
           messages: [{ role: "user", content }],

@@ -15,10 +15,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
-import { listPostings, upsertPosting, deletePosting, isCurrentUserAdmin, extractFromUrl } from "@/lib/postings.functions";
+import { listPostings, upsertPosting, deletePosting, isCurrentUserAdmin, extractFromUrl, getAiSettingsStatus, testAiConnection } from "@/lib/postings.functions";
 import type { Posting } from "@/components/posting-card";
 import { toast } from "sonner";
-import { Plus, Trash2, Pencil, LogOut, Sparkles, ExternalLink, ShieldAlert, RefreshCw } from "lucide-react";
+import { Plus, Trash2, Pencil, LogOut, Sparkles, ExternalLink, ShieldAlert, RefreshCw, Settings, KeyRound } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "Admin — Skynet Layyah" }] }),
@@ -54,9 +54,12 @@ function AdminPage() {
   const deleteFn = useServerFn(deletePosting);
   const adminCheckFn = useServerFn(isCurrentUserAdmin);
   const extractFn = useServerFn(extractFromUrl);
+  const aiStatusFn = useServerFn(getAiSettingsStatus);
+  const testAiFn = useServerFn(testAiConnection);
 
   const adminQ = useQuery({ queryKey: ["is-admin"], queryFn: () => adminCheckFn() });
   const postingsQ = useQuery({ queryKey: ["admin-postings"], queryFn: () => listFn() as Promise<Posting[]> });
+  const aiStatusQ = useQuery({ queryKey: ["ai-settings-status"], queryFn: () => aiStatusFn(), enabled: !!adminQ.data?.isAdmin });
 
   const [tab, setTab] = useState<"job" | "admission" | "scheme">("job");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -67,6 +70,8 @@ function AdminPage() {
   const [fetchType, setFetchType] = useState<"job" | "admission" | "scheme">("job");
   const [fetchLoading, setFetchLoading] = useState(false);
   const [fetchResults, setFetchResults] = useState<Array<{ title?: string; organization?: string; location?: string; description?: string; deadline?: string | null; apply_url?: string | null }>>([]);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [testingAi, setTestingAi] = useState(false);
 
   useEffect(() => {
     if (adminQ.data && !adminQ.data.isAdmin) toast.warning("Aapke pass admin role nahi hai. Sirf view mode.");
@@ -186,6 +191,19 @@ function AdminPage() {
     navigate({ to: "/" });
   };
 
+  const testAi = async () => {
+    setTestingAi(true);
+    try {
+      const result = await testAiFn();
+      result.ok ? toast.success(result.message) : toast.error(result.message);
+      aiStatusQ.refetch();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "AI connection test failed");
+    } finally {
+      setTestingAi(false);
+    }
+  };
+
   const filtered = (postingsQ.data ?? []).filter((p) => p.type === tab);
   const counts = {
     job: (postingsQ.data ?? []).filter((p) => p.type === "job").length,
@@ -202,6 +220,27 @@ function AdminPage() {
             <p className="text-xs sm:text-sm text-muted-foreground">Jobs, admissions aur schemes manage karen.</p>
           </div>
           <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
+            <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="gap-2"><Settings className="h-4 w-4" /> AI Settings</Button>
+              </DialogTrigger>
+              <DialogContent className="w-[calc(100vw-2rem)] max-w-lg">
+                <DialogHeader><DialogTitle className="flex items-center gap-2"><KeyRound className="h-5 w-5 text-primary" /> AI Settings</DialogTitle></DialogHeader>
+                <div className="space-y-4 text-sm">
+                  <div className="flex items-center justify-between gap-4 rounded-md border p-3">
+                    <div><div className="font-semibold">Current provider</div><div className="text-muted-foreground">{aiStatusQ.data?.provider ?? "Not configured"}</div></div>
+                    <Badge variant={aiStatusQ.data?.groqConfigured ? "default" : "secondary"}>{aiStatusQ.data?.groqConfigured ? "Connected" : "Missing"}</Badge>
+                  </div>
+                  <p className="text-muted-foreground">API key browser mein save ya display nahi hoti. Netlify deployment ki key change karne ke liye environment variable <code>GROQ_API_KEY</code> update karke site redeploy karein.</p>
+                  <div className="flex flex-col gap-2 sm:flex-row">
+                    <Button onClick={testAi} disabled={testingAi} className="gap-2">{testingAi && <RefreshCw className="h-4 w-4 animate-spin" />} Test connection</Button>
+                    <a href="https://app.netlify.com/sites/skynetlayyah/configuration/env" target="_blank" rel="noreferrer">
+                      <Button variant="outline" className="w-full gap-2"><ExternalLink className="h-4 w-4" /> Change key on Netlify</Button>
+                    </a>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
             <Dialog open={fetchOpen} onOpenChange={setFetchOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" className="gap-2 col-span-2 sm:col-span-1"><Sparkles className="h-4 w-4" /> AI Auto-fetch</Button>
