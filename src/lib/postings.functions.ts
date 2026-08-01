@@ -106,23 +106,72 @@ export const isCurrentUserAdmin = createServerFn({ method: "GET" })
     return { isAdmin: !!data };
   });
 
+type AnyClient = { from: (t: string) => any };
+
+// Key saved from the Admin panel (DB) wins over the hosting env variable,
+// so the owner can change it without touching Netlify.
+async function readStoredGroqKey(supabase: AnyClient): Promise<string | null> {
+  try {
+    const { data } = await supabase.from("app_settings").select("value").eq("key", "GROQ_API_KEY").maybeSingle();
+    const v = (data?.value ?? "").trim();
+    return v ? v : null;
+  } catch {
+    return null;
+  }
+}
+
+async function resolveGroqKey(supabase: AnyClient): Promise<string | null> {
+  return (await readStoredGroqKey(supabase)) ?? (process.env["GROQ_API_KEY"]?.trim() || null);
+}
+
 export const getAiSettingsStatus = createServerFn({ method: "GET" })
   .middleware([requireSkynetAuth])
   .handler(async ({ context }) => {
     await assertAdmin({ supabase: context.supabase, userId: context.userId });
+    const stored = await readStoredGroqKey(context.supabase);
+    const envKey = process.env["GROQ_API_KEY"]?.trim() || null;
+    const groqKey = stored ?? envKey;
     return {
-      provider: process.env["GROQ_API_KEY"] ? "Groq" : process.env["LOVABLE_API_KEY"] ? "Lovable AI" : null,
-      configured: Boolean(process.env["GROQ_API_KEY"] || process.env["LOVABLE_API_KEY"]),
-      groqConfigured: Boolean(process.env["GROQ_API_KEY"]),
+      provider: groqKey ? "Groq" : process.env["LOVABLE_API_KEY"] ? "Lovable AI" : null,
+      configured: Boolean(groqKey || process.env["LOVABLE_API_KEY"]),
+      groqConfigured: Boolean(groqKey),
+      source: stored ? ("saved" as const) : envKey ? ("env" as const) : null,
+      keyPreview: groqKey ? `${groqKey.slice(0, 6)}...${groqKey.slice(-4)}` : null,
     };
+  });
+
+export const saveAiKey = createServerFn({ method: "POST" })
+  .middleware([requireSkynetAuth])
+  .inputValidator((input: unknown) => z.object({ key: z.string().min(10).max(500) }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin({ supabase: context.supabase, userId: context.userId });
+    const key = data.key.trim();
+    const check = await fetch("https://api.groq.com/openai/v1/models", {
+      headers: { Authorization: `Bearer ${key}` },
+    });
+    if (!check.ok) return { ok: false, message: `Groq ne key reject ki (${check.status}). Key dobara check karein.` };
+    const { error } = await context.supabase
+      .from("app_settings")
+      .upsert({ key: "GROQ_API_KEY", value: key, updated_at: new Date().toISOString() }, { onConflict: "key" });
+    if (error) return { ok: false, message: error.message };
+    return { ok: true, message: "Key save ho gayi — ab AI fetch chalega (redeploy ki zaroorat nahi)." };
+  });
+
+export const clearAiKey = createServerFn({ method: "POST" })
+  .middleware([requireSkynetAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin({ supabase: context.supabase, userId: context.userId });
+    const { error } = await context.supabase.from("app_settings").delete().eq("key", "GROQ_API_KEY");
+    if (error) return { ok: false, message: error.message };
+    return { ok: true, message: "Saved key hata di gayi." };
   });
 
 export const testAiConnection = createServerFn({ method: "POST" })
   .middleware([requireSkynetAuth])
   .handler(async ({ context }) => {
     await assertAdmin({ supabase: context.supabase, userId: context.userId });
-    const groqKey = process.env["GROQ_API_KEY"];
-    if (!groqKey) return { ok: false, message: "GROQ_API_KEY is not set on this deployment." };
+    const groqKey = await resolveGroqKey(context.supabase);
+    if (!groqKey) return { ok: false, message: "Koi Groq key set nahi hai. Neeche key paste karke Save karein." };
     const response = await fetch("https://api.groq.com/openai/v1/models", {
       headers: { Authorization: `Bearer ${groqKey}` },
     });
@@ -139,10 +188,10 @@ export const extractFromUrl = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin({ supabase: context.supabase, userId: context.userId });
     const apiKey = process.env["LOVABLE_API_KEY"];
-    const groqKey = process.env["GROQ_API_KEY"];
+    const groqKey = await resolveGroqKey(context.supabase);
     if (!apiKey && !groqKey)
       throw new Error(
-        "AI service not configured: set GROQ_API_KEY (or LOVABLE_API_KEY) in your hosting environment variables (Netlify → Site settings → Environment variables), then redeploy.",
+        "AI key set nahi hai. Admin Panel → AI Settings mein apni Groq key paste karke Save karein.",
       );
 
     let pageText = "";

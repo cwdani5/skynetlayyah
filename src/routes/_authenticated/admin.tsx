@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
-import { listPostings, upsertPosting, deletePosting, isCurrentUserAdmin, extractFromUrl, getAiSettingsStatus, testAiConnection } from "@/lib/postings.functions";
+import { listPostings, upsertPosting, deletePosting, isCurrentUserAdmin, extractFromUrl, getAiSettingsStatus, testAiConnection, saveAiKey, clearAiKey } from "@/lib/postings.functions";
 import type { Posting } from "@/components/posting-card";
 import { toast } from "sonner";
 import { Plus, Trash2, Pencil, LogOut, Sparkles, ExternalLink, ShieldAlert, RefreshCw, Settings, KeyRound } from "lucide-react";
@@ -72,6 +72,41 @@ function AdminPage() {
   const [fetchResults, setFetchResults] = useState<Array<{ title?: string; organization?: string; location?: string; description?: string; deadline?: string | null; apply_url?: string | null }>>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [testingAi, setTestingAi] = useState(false);
+  const [aiKeyInput, setAiKeyInput] = useState("");
+  const [savingKey, setSavingKey] = useState(false);
+
+  const saveAiKeyFn = useServerFn(saveAiKey);
+  const clearAiKeyFn = useServerFn(clearAiKey);
+
+  const saveAiKeyHandler = async () => {
+    setSavingKey(true);
+    try {
+      const res = await saveAiKeyFn({ data: { key: aiKeyInput.trim() } });
+      if (res.ok) {
+        toast.success(res.message);
+        setAiKeyInput("");
+        aiStatusQ.refetch();
+      } else toast.error(res.message);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Key save nahi hui");
+    } finally {
+      setSavingKey(false);
+    }
+  };
+
+  const clearAiKeyHandler = async () => {
+    setSavingKey(true);
+    try {
+      const res = await clearAiKeyFn();
+      if (res.ok) { toast.success(res.message); aiStatusQ.refetch(); }
+      else toast.error(res.message);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Key remove nahi hui");
+    } finally {
+      setSavingKey(false);
+    }
+  };
+
 
   useEffect(() => {
     if (adminQ.data && !adminQ.data.isAdmin) toast.warning("Aapke pass admin role nahi hai. Sirf view mode.");
@@ -228,17 +263,39 @@ function AdminPage() {
                 <DialogHeader><DialogTitle className="flex items-center gap-2"><KeyRound className="h-5 w-5 text-primary" /> AI Settings</DialogTitle></DialogHeader>
                 <div className="space-y-4 text-sm">
                   <div className="flex items-center justify-between gap-4 rounded-md border p-3">
-                    <div><div className="font-semibold">Current provider</div><div className="text-muted-foreground">{aiStatusQ.data?.provider ?? "Not configured"}</div></div>
+                    <div className="min-w-0">
+                      <div className="font-semibold">Current provider</div>
+                      <div className="text-muted-foreground truncate">
+                        {aiStatusQ.data?.provider ?? "Not configured"}
+                        {aiStatusQ.data?.keyPreview ? ` · ${aiStatusQ.data.keyPreview}` : ""}
+                        {aiStatusQ.data?.source === "saved" ? " (saved here)" : aiStatusQ.data?.source === "env" ? " (hosting env)" : ""}
+                      </div>
+                    </div>
                     <Badge variant={aiStatusQ.data?.groqConfigured ? "default" : "secondary"}>{aiStatusQ.data?.groqConfigured ? "Connected" : "Missing"}</Badge>
                   </div>
-                  <p className="text-muted-foreground">API key browser mein save ya display nahi hoti. Netlify deployment ki key change karne ke liye environment variable <code>GROQ_API_KEY</code> update karke site redeploy karein.</p>
+
+                  <div className="space-y-2 rounded-md border p-3">
+                    <div className="font-semibold">Groq API key</div>
+                    <p className="text-xs text-muted-foreground">Yahan key paste karke Save karein — Netlify jaane ya redeploy karne ki zaroorat nahi. Key sirf server par store hoti hai.</p>
+                    <Input type="password" placeholder="gsk_..." value={aiKeyInput} onChange={(e) => setAiKeyInput(e.target.value)} autoComplete="off" />
+                    <div className="flex flex-col gap-2 sm:flex-row">
+                      <Button onClick={saveAiKeyHandler} disabled={savingKey || aiKeyInput.trim().length < 10} className="gap-2">
+                        {savingKey && <RefreshCw className="h-4 w-4 animate-spin" />} Save key
+                      </Button>
+                      {aiStatusQ.data?.source === "saved" && (
+                        <Button variant="outline" onClick={clearAiKeyHandler} disabled={savingKey} className="gap-2">Remove saved key</Button>
+                      )}
+                    </div>
+                  </div>
+
                   <div className="flex flex-col gap-2 sm:flex-row">
-                    <Button onClick={testAi} disabled={testingAi} className="gap-2">{testingAi && <RefreshCw className="h-4 w-4 animate-spin" />} Test connection</Button>
-                    <a href="https://app.netlify.com/sites/skynetlayyah/configuration/env" target="_blank" rel="noreferrer">
-                      <Button variant="outline" className="w-full gap-2"><ExternalLink className="h-4 w-4" /> Change key on Netlify</Button>
+                    <Button variant="outline" onClick={testAi} disabled={testingAi} className="gap-2">{testingAi && <RefreshCw className="h-4 w-4 animate-spin" />} Test connection</Button>
+                    <a href="https://console.groq.com/keys" target="_blank" rel="noreferrer">
+                      <Button variant="ghost" className="w-full gap-2"><ExternalLink className="h-4 w-4" /> Get a Groq key</Button>
                     </a>
                   </div>
                 </div>
+
               </DialogContent>
             </Dialog>
             <Dialog open={fetchOpen} onOpenChange={setFetchOpen}>
