@@ -306,7 +306,7 @@ function AdminPage() {
                 <DialogHeader><DialogTitle className="flex items-center gap-2"><Sparkles className="h-5 w-5 text-primary" /> Fetch from official website</DialogTitle></DialogHeader>
                 <div className="space-y-3">
                   <div className="grid gap-2 sm:grid-cols-[1fr_180px]">
-                    <Input placeholder="https://www.fpsc.gov.pk/..." value={fetchUrl} onChange={(e) => setFetchUrl(e.target.value)} />
+                    <Input placeholder="https://www.fpsc.gov.pk/... (webpage, PDF ya image URL)" value={fetchUrl} onChange={(e) => setFetchUrl(e.target.value)} />
                     <Select value={fetchType} onValueChange={(v) => setFetchType(v as never)}>
                       <SelectTrigger><SelectValue /></SelectTrigger>
                       <SelectContent>
@@ -324,7 +324,18 @@ function AdminPage() {
                       <Button variant="secondary" onClick={importAll} className="gap-2">Import all ({fetchResults.length})</Button>
                     )}
                   </div>
-                  <p className="text-xs text-muted-foreground">Tip: PPSC/FPSC ad ka PDF ya webpage URL do — andar ki har post alag entry ban kar aayegi.</p>
+
+                  <div className="rounded-md border p-3 space-y-2">
+                    <div className="text-sm font-semibold">Ya text paste karein</div>
+                    <p className="text-xs text-muted-foreground">Agar website block kare (Cloudflare / login), to us page ka poora text copy karke yahan paste karein — har post alag entry ban jayegi.</p>
+                    <Textarea rows={5} placeholder="Ad ka text yahan paste karein…" value={pasteText} onChange={(e) => setPasteText(e.target.value)} />
+                    <Button variant="outline" onClick={runPasteFetch} disabled={pasteText.trim().length < 30 || fetchLoading} className="gap-2">
+                      {fetchLoading ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />} Extract from text
+                    </Button>
+                  </div>
+
+                  <p className="text-xs text-muted-foreground">Tip: PPSC/FPSC ad ka PDF, JPEG ya webpage URL do — andar ki har post alag entry ban kar aayegi.</p>
+
                   <div className="max-h-80 overflow-auto space-y-2">
                     {fetchResults.map((it, i) => (
                       <div key={i} className="rounded-lg border p-3 text-sm">
